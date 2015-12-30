@@ -1,5 +1,52 @@
 ## twiggy
 
+## TEMPLATES ##
+
+Loading templates from database and file system.
+Add extension and template inheritance.
+
+* base template
+
+```
+<!DOCTYPE html> 
+<html>
+    <head>
+        {% block head %}
+            <link rel="stylesheet" href="style.css" />
+            <title>{% block title %}{% endblock %} - Мой сайт</title>
+        {% endblock %}
+    </head>
+    <body>
+        <div id="content">{% block content %}{% endblock %}</div>
+        <div id="footer">
+            {% block footer %}
+                &copy; Copyright 2013 <a href="http://example.com/">Вы</a>.
+            {% endblock %}
+        </div>
+    </body>
+</html>
+```
+
+* inherited template
+
+```
+{% extends "base" %}
+
+{% block title %}Главная{% endblock %}
+{% block head %}
+    {{ parent() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+{% block content %}
+    <h1>Главная</h1>
+    <p class="important">
+        Приветсвую на своем потрясном сайте!
+    </p>
+{% endblock %}
+```
+
 ## PCRE ##
 
 * preg_quote   - Quote regular expression characters

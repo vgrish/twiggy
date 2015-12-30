@@ -1,6 +1,6 @@
 <?php
 
-class twiggyOnSiteRefresh extends twiggyPlugin
+class twiggyOnTemplateRemove extends twiggyPlugin
 {
 	public function run()
 	{

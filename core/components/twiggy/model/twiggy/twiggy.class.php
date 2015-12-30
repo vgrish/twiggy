@@ -59,6 +59,9 @@ class Twiggy
 		return $option;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getConfig()
 	{
 		/* array cache $options */
@@ -81,6 +84,9 @@ class Twiggy
 		return $config;
 	}
 
+	/**
+	 * @param array $config
+	 */
 	public function setConfig(array $config = array())
 	{
 		$this->config = array_merge(array(
@@ -91,6 +97,60 @@ class Twiggy
 		), $config);
 	}
 
+	/**
+	 * @return array
+	 */
+	public function getDataBaseTemplates()
+	{
+		/* array cache $options */
+		$options = array(
+			'cache_key' => 'config/templates/database',
+			'cacheTime' => 0,
+		);
+		if (!$templates = $this->getCache($options)) {
+			$q = $this->modx->newQuery('modTemplate');
+			$q->select('templatename,content');
+			if ($q->prepare() && $q->stmt->execute()) {
+				$rows = $q->stmt->fetchAll(PDO::FETCH_ASSOC);
+				foreach ($rows as $row) {
+					$templates[$row['templatename']] = $row['content'];
+				}
+			}
+			$this->setCache($templates, $options);
+		}
+
+		return (array)$templates;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getFileTemplates()
+	{
+		/* array cache $options */
+		$options = array(
+			'cache_key' => 'config/templates/file',
+			'cacheTime' => 0,
+		);
+		if (!$templates = $this->getCache($options)) {
+			$paths = $this->explodeAndClean($this->getOption('path_templates', null, '', true));
+			foreach ($paths as $path) {
+				$files = scandir($path);
+				foreach ($files as $file) {
+					if (preg_match('/.*?\.tpl$/i', $file)) {
+						$templates[str_replace('.tpl', '', $file)] = file_get_contents($path . '/' . $file);
+					}
+				}
+			}
+			$this->setCache($templates, $options);
+		}
+
+		return (array)$templates;
+	}
+
+	/**
+	 * @return twiggyParser
+	 */
 	protected function getParser()
 	{
 		$this->parser = $this->modx->getParser();
@@ -104,6 +164,9 @@ class Twiggy
 		return $this->parser;
 	}
 
+	/**
+	 * @return bool|Twig|Twig_Environment
+	 */
 	public function getTwig()
 	{
 
@@ -111,7 +174,13 @@ class Twiggy
 			try {
 				require_once dirname(dirname(dirname(__FILE__))) . '/vendor/Twig/vendor/autoload.php';
 
-				$twig = new Twig_Environment(new Twig_Loader_Array(array()), $this->config);
+				/* get $templates */
+				$templates = array_merge(
+					$this->getFileTemplates(),
+					$this->getDataBaseTemplates()
+				);
+
+				$twig = new Twig_Environment(new Twig_Loader_Array($templates), $this->config);
 				$this->debug = (boolean)$this->getOption('debug', $this->config, false, true);
 				if ($this->debug) {
 					$twig->addExtension(new Twig_Extension_Debug());
@@ -123,7 +192,7 @@ class Twiggy
 					$pathExtensions = trim($this->getOption('path_extensions', $this->config, '', true));
 					$this->loadExtensions($pathExtensions);
 					foreach ($extensions as $extension) {
-						$extension = 'Twig_Extensions_Extension_'.$extension;
+						$extension = 'Twig_Extensions_Extension_' . $extension;
 						${$extension} = new $extension($this);
 						if (class_exists($extension) AND ${$extension} instanceof Twig_Extension) {
 							$twig->addExtension(${$extension});
@@ -135,6 +204,7 @@ class Twiggy
 				$this->twig = &$twig;
 			} catch (Exception $e) {
 				$this->modx->log(xPDO::LOG_LEVEL_ERROR, $e->getMessage());
+
 				return false;
 			}
 		}
@@ -142,6 +212,9 @@ class Twiggy
 		return $this->twig;
 	}
 
+	/**
+	 * @param $path
+	 */
 	public function loadExtensions($path)
 	{
 		$files = scandir($path);
@@ -152,6 +225,12 @@ class Twiggy
 		}
 	}
 
+	/**
+	 * @param        $array
+	 * @param string $delimiter
+	 *
+	 * @return array
+	 */
 	public function explodeAndClean($array, $delimiter = ',')
 	{
 		$array = explode($delimiter, $array);     // Explode fields to array
@@ -161,6 +240,12 @@ class Twiggy
 		return $array;
 	}
 
+	/**
+	 * @param        $array
+	 * @param string $delimiter
+	 *
+	 * @return array|string
+	 */
 	public function cleanAndImplode($array, $delimiter = ',')
 	{
 		$array = array_map('trim', $array);       // Trim array's values
@@ -171,6 +256,12 @@ class Twiggy
 		return $array;
 	}
 
+	/**
+	 * @param       $content
+	 * @param array $properties
+	 *
+	 * @return string
+	 */
 	public function process($content, array $properties = array())
 	{
 		$content = is_array($content) ? trim($content['content']) : trim($content);
@@ -234,6 +325,11 @@ class Twiggy
 		return $cached;
 	}
 
+	/**
+	 * @param array $options
+	 *
+	 * @return bool
+	 */
 	public function clearCache($options = array())
 	{
 		$cacheKey = $this->getCacheKey($options);
@@ -269,11 +365,20 @@ class Twiggy
 				? $options['cache_handler']
 				: $this->modx->getOption('cache_resource_handler', null, 'xPDOFileCache'),
 			xPDO::OPT_CACHE_EXPIRES => (isset($options['cacheTime']) AND $options['cacheTime'] !== '')
-					? (integer)$options['cacheTime']
-					: (integer)$this->modx->getOption('cache_resource_expires', null, 0),
+				? (integer)$options['cacheTime']
+				: (integer)$this->modx->getOption('cache_resource_expires', null, 0),
 		);
 
 		return $cacheOptions;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function clearTwiggyCache()
+	{
+		$folder = rtrim(trim($this->getOption('cache', $this->config, MODX_CORE_PATH . 'cache/default/twiggy/', true)), 'cache/') . '/';
+		return $this->modx->cacheManager->deleteTree($folder, array('deleteTop' => true, 'extensions' => array('.string.php', '.cache.php', '.php')));
 	}
 
 	/**

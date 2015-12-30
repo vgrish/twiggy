@@ -16,6 +16,13 @@ $tmp = array(
 		//'value' => '{core_path}components/twiggy/elements/extensions/',
 		'area'  => 'twiggy_main',
 	),
+	'path_templates' => array(
+		'xtype' => 'textarea',
+		'value' => '{base_path}twiggy/core/components/twiggy/elements/templates/',
+
+		//'value' => '{core_path}components/twiggy/elements/templates/',
+		'area'  => 'twiggy_main',
+	),
 	'extensions'      => array(
 		'xtype' => 'textarea',
 		'value' => 'UniqID,Text,Pcre,Cache',//'UniqID,Text,Pcre,Cache',
