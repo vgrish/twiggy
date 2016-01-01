@@ -47,6 +47,61 @@ Add extension and template inheritance.
 {% endblock %}
 ```
 
+## CACHE ##
+
+```
+{% cache 'neighbors' 3000 %}
+    {{ modx.runSnippet('pdoNeighbors') }}
+{% endcache %}
+```
+
+## TOOLS ##
+
+* Filters
+
+* get - 
+* post - 
+* session - 
+* cookie - 
+* request - 
+* files - 
+* server - 
+* option - 
+* lexicon -
+* pls - 
+* url -
+* toJson - 
+* fromJson - 
+* toArray - 
+* field - 
+
+```
+{{ 'modx.mgr.user.token'|session }}
+{{ 'site_name'|option }}
+{{ '+upload_images'|pls }}
+{{ '[[*id]]'|url('','',1) }}
+{{ dump(modx.getObject('modUserProfile', 1)|toArray) }}
+ 
+```
+
+* Functions
+
+* chunk - 
+* snippet - 
+* processor - 
+
+```
+{{ chunk('@INLINE [[+name]]',{'name':'Володя Володин'}) }}
+{{ snippet('pdoNeighbors') }}
+
+{% set response = processor('mgr/valute/getlist',{'ns':'currencyrate', 'sortdir':'asc'}) %}
+{# { dump(response) }#}
+{% for result in response.response.results %}
+    <h5>{{ result.charcode }}</h5>
+{% endfor %}
+
+```
+
 ## PCRE ##
 
 * preg_quote   - Quote regular expression characters
@@ -67,12 +122,4 @@ First name: {{ fullname|preg_get('/^\S+/') }}
     <li>{{ item }}</li>
   {% endfor %}
 </ul>
-```
-
-## CACHE ##
-
-```
-{% cache 'neighbors' 3000 %}
-    {{ modx.runSnippet('pdoNeighbors') }}
-{% endcache %}
 ```
