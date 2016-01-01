@@ -59,32 +59,44 @@ Add extension and template inheritance.
 
 * Filters
 
-* get - 
-* post - 
-* session - 
-* cookie - 
-* request - 
-* files - 
-* server - 
+* pls - 
 * option - 
 * lexicon -
-* pls - 
-* url -
+* makeUrl -
 * toJson - 
 * fromJson - 
 * toArray - 
 * field - 
 
 ```
-{{ 'modx.mgr.user.token'|session }}
 {{ 'site_name'|option }}
 {{ '+upload_images'|pls }}
-{{ '[[*id]]'|url('','',1) }}
+{{ '[[*id]]'|makeUrl('','',1) }}
 {{ dump(modx.getObject('modUserProfile', 1)|toArray) }}
  
 ```
 
 * Functions
+
+* lexicon - 
+* makeUrl - 
+* toJson -
+* fromJson - 
+* getField -
+* getCount - 
+* getObject - 
+* sendError - 
+* sendRedirect - 
+* sendForward - 
+* setPlaceholder - 
+* setPlaceholders - 
+* toPlaceholder - 
+* toPlaceholders - 
+* getPlaceholder (getPls) - 
+* getPlaceholders - 
+* unsetPlaceholder - 
+* unsetPlaceholders - 
+* getOption - 
 
 * chunk - 
 * snippet - 
