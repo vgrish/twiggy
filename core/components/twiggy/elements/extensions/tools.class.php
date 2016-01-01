@@ -200,6 +200,8 @@ class Twig_Extensions_Extension_Tools extends Twig_Extension
 			new Twig_SimpleFunction('getOption', 'Twig_Extensions_Extension_Tools::getOption'),
 			new Twig_SimpleFunction('getPls', 'Twig_Extensions_Extension_Tools::getPlaceholder'),
 
+			new Twig_SimpleFunction('var_dump', 'Twig_Extensions_Extension_Tools::var_dump'),
+			new Twig_SimpleFunction('log', 'Twig_Extensions_Extension_Tools::log'),
 			new Twig_SimpleFunction('chunk', 'Twig_Extensions_Extension_Tools::chunk'),
 			new Twig_SimpleFunction('snippet', 'Twig_Extensions_Extension_Tools::snippet'),
 			new Twig_SimpleFunction('processor', 'Twig_Extensions_Extension_Tools::processor'),
@@ -441,6 +443,25 @@ class Twig_Extensions_Extension_Tools extends Twig_Extension
 	{
 		self::$modx->unsetPlaceholders($keys);
 	}
+
+	/**
+	 * @param $log
+	 */
+	public static function var_dump($log)
+	{
+		echo "<pre class=\"twiggy var_dump\">\n";
+		var_dump($log);
+		echo "</pre>";
+	}
+
+	/**
+	 * @param     $log
+	 */
+	public static function log($log)
+	{
+		self::$modx->log(modX::LOG_LEVEL_ERROR, print_r($log, 1));
+	}
+
 
 
 	/**
