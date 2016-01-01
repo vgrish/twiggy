@@ -13,6 +13,16 @@
 class Twig_Extensions_Extension_Text extends Twig_Extension
 {
 	/**
+	 * Name of this extension.
+	 *
+	 * @return string
+	 */
+	public function getName()
+	{
+		return 'twiggy/text';
+	}
+
+	/**
 	 * Returns a list of filters.
 	 *
 	 * @return array
@@ -25,15 +35,7 @@ class Twig_Extensions_Extension_Text extends Twig_Extension
 		);
 	}
 
-	/**
-	 * Name of this extension.
-	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		return 'Text';
-	}
+
 }
 
 if (function_exists('mb_get_info')) {

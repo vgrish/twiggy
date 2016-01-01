@@ -25,7 +25,7 @@ $tmp = array(
 	),
 	'extensions'      => array(
 		'xtype' => 'textarea',
-		'value' => 'UniqID,Text,Pcre,Cache',//'UniqID,Text,Pcre,Cache',
+		'value' => 'UniqID,Text,Pcre,Cache,Tools',//'UniqID,Text,Pcre,Cache',
 		'area'  => 'twiggy_main',
 	),
 

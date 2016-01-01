@@ -2,12 +2,17 @@
 
 class Twig_Extensions_Extension_UniqID extends Twig_Extension
 {
+	/**
+	 * @return string
+	 */
 	public function getName()
 	{
-		return 'Twig_Extensions_Extension_UniqID';
+		return 'twiggy/uniqid';
 	}
 
-
+	/**
+	 * @return array
+	 */
 	public function getFunctions()
 	{
 		return array(
@@ -15,6 +20,9 @@ class Twig_Extensions_Extension_UniqID extends Twig_Extension
 		);
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function uniqid()
 	{
 		return uniqid();

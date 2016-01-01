@@ -12,7 +12,7 @@ class Twiggy
 {
 	/* @var modX $modx */
 	public $modx;
-	/** @var Twig $twig */
+	/** @var Twig_Environment $twig */
 	public $twig;
 	/** @var twiggyParser $parser */
 	public $parser;
@@ -180,10 +180,11 @@ class Twiggy
 					$this->getDataBaseTemplates()
 				);
 
-				$twig = new Twig_Environment(new Twig_Loader_Array($templates), $this->config);
+				/** @var Twig_Environment twig */
+				$this->twig = new Twig_Environment(new Twig_Loader_Array($templates), $this->config);
 				$this->debug = (boolean)$this->getOption('debug', $this->config, false, true);
 				if ($this->debug) {
-					$twig->addExtension(new Twig_Extension_Debug());
+					$this->twig->addExtension(new Twig_Extension_Debug());
 				}
 
 				/** load $extensions */
@@ -195,13 +196,14 @@ class Twiggy
 						$extension = 'Twig_Extensions_Extension_' . $extension;
 						${$extension} = new $extension($this);
 						if (class_exists($extension) AND ${$extension} instanceof Twig_Extension) {
-							$twig->addExtension(${$extension});
+							$this->twig->addExtension(${$extension});
 						}
 					}
 				}
 
-				$twig->addGlobal('modx', $this->modx);
-				$this->twig = &$twig;
+				/** set Globals */
+				$this->setGlobals();
+
 			} catch (Exception $e) {
 				$this->modx->log(xPDO::LOG_LEVEL_ERROR, $e->getMessage());
 
@@ -226,34 +228,20 @@ class Twiggy
 	}
 
 	/**
-	 * @param        $array
-	 * @param string $delimiter
-	 *
-	 * @return array
+	 * setGlobals
 	 */
-	public function explodeAndClean($array, $delimiter = ',')
+	public function setGlobals()
 	{
-		$array = explode($delimiter, $array);     // Explode fields to array
-		$array = array_map('trim', $array);       // Trim array's values
-		$array = array_keys(array_flip($array));  // Remove duplicate fields
-		$array = array_filter($array);            // Remove empty values from array
-		return $array;
-	}
-
-	/**
-	 * @param        $array
-	 * @param string $delimiter
-	 *
-	 * @return array|string
-	 */
-	public function cleanAndImplode($array, $delimiter = ',')
-	{
-		$array = array_map('trim', $array);       // Trim array's values
-		$array = array_keys(array_flip($array));  // Remove duplicate fields
-		$array = array_filter($array);            // Remove empty values from array
-		$array = implode($delimiter, $array);
-
-		return $array;
+		if ($this->twig) {
+			$this->twig->addGlobal('get', $_GET);
+			$this->twig->addGlobal('post', $_POST);
+			$this->twig->addGlobal('session', $_SESSION);
+			$this->twig->addGlobal('cookie', $_COOKIE);
+			$this->twig->addGlobal('request', $_REQUEST);
+			$this->twig->addGlobal('files', $_FILES);
+			$this->twig->addGlobal('server', $_SERVER);
+			$this->twig->addGlobal('modx', $this->modx);
+		}
 	}
 
 	/**
@@ -262,7 +250,7 @@ class Twiggy
 	 *
 	 * @return string
 	 */
-	public function process($content, array $properties = array())
+	public function process($content, array $pls = array())
 	{
 		$content = is_array($content) ? trim($content['content']) : trim($content);
 		if (!preg_match('#\{.*\}#', $content)) {
@@ -273,8 +261,7 @@ class Twiggy
 		}
 		try {
 			$template = $twig->createTemplate($content);
-			$content = $template->render($properties);
-
+			$content = $template->render(array('pls' => $pls));
 		} catch (Exception $e) {
 			$this->modx->log(modX::LOG_LEVEL_ERROR, $e->getMessage());
 		}
@@ -344,7 +331,6 @@ class Twiggy
 		return false;
 	}
 
-
 	/**
 	 * Returns array with options for cache
 	 *
@@ -373,15 +359,6 @@ class Twiggy
 	}
 
 	/**
-	 * @return bool
-	 */
-	public function clearTwiggyCache()
-	{
-		$folder = rtrim(trim($this->getOption('cache', $this->config, MODX_CORE_PATH . 'cache/default/twiggy/', true)), 'cache/') . '/';
-		return $this->modx->cacheManager->deleteTree($folder, array('deleteTop' => true, 'extensions' => array('.string.php', '.cache.php', '.php')));
-	}
-
-	/**
 	 * Returns key for cache of specified options
 	 *
 	 * @var mixed $options
@@ -401,6 +378,47 @@ class Twiggy
 			: '';
 
 		return $key . '/' . sha1(serialize($options));
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function clearTwiggyCache()
+	{
+		$folder = rtrim(trim($this->getOption('cache', $this->config, MODX_CORE_PATH . 'cache/default/twiggy/', true)), 'cache/') . '/';
+
+		return $this->modx->cacheManager->deleteTree($folder, array('deleteTop' => true, 'extensions' => array('.string.php', '.cache.php', '.php')));
+	}
+
+	/**
+	 * @param        $array
+	 * @param string $delimiter
+	 *
+	 * @return array
+	 */
+	public function explodeAndClean($array, $delimiter = ',')
+	{
+		$array = explode($delimiter, $array);     // Explode fields to array
+		$array = array_map('trim', $array);       // Trim array's values
+		$array = array_keys(array_flip($array));  // Remove duplicate fields
+		$array = array_filter($array);            // Remove empty values from array
+		return $array;
+	}
+
+	/**
+	 * @param        $array
+	 * @param string $delimiter
+	 *
+	 * @return array|string
+	 */
+	public function cleanAndImplode($array, $delimiter = ',')
+	{
+		$array = array_map('trim', $array);       // Trim array's values
+		$array = array_keys(array_flip($array));  // Remove duplicate fields
+		$array = array_filter($array);            // Remove empty values from array
+		$array = implode($delimiter, $array);
+
+		return $array;
 	}
 
 }

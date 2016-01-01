@@ -1,5 +1,9 @@
 Changelog for Twiggy.
 
+1.0.3-beta (1.01.2016)
+==============
+- Add Tools Extension
+
 1.0.2-beta (30.12.2015)
 ==============
 - Add templates

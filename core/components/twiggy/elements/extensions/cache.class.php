@@ -3,7 +3,7 @@
 require_once dirname(__FILE__) . '/node/cachenode.class.php';
 require_once dirname(__FILE__) . '/tokenparser/cache.class.php';
 
-class Twig_Extensions_Extension_Cache extends \Twig_Extension
+class Twig_Extensions_Extension_Cache extends Twig_Extension
 {
 	/** @var MODx $modx */
 	private $modx;
@@ -17,6 +17,14 @@ class Twig_Extensions_Extension_Cache extends \Twig_Extension
 	{
 		$this->Twiggy = &$Twiggy;
 		$this->modx = &$Twiggy->modx;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getName()
+	{
+		return 'twiggy/cache';
 	}
 
 	/**
@@ -35,13 +43,6 @@ class Twig_Extensions_Extension_Cache extends \Twig_Extension
 		return $this->modx;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getName()
-	{
-		return 'twiggy/cache';
-	}
 
 	/**
 	 * @return array
