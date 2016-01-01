@@ -103,6 +103,8 @@ Add extension and template inheritance.
 * processor - 
 
 ```
+{{ getCount('modUser') }}
+{{ getObject('modUserProfile', {'email':'admin@mail.ru'})|toJson }}
 {{ chunk('@INLINE [[+name]]',{'name':'Володя Володин'}) }}
 {{ snippet('pdoNeighbors') }}
 
