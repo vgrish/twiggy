@@ -462,8 +462,6 @@ class Twig_Extensions_Extension_Tools extends Twig_Extension
 		self::$modx->log(modX::LOG_LEVEL_ERROR, print_r($log, 1));
 	}
 
-
-
 	/**
 	 * @param       $name
 	 * @param array $properties
@@ -478,18 +476,24 @@ class Twig_Extensions_Extension_Tools extends Twig_Extension
 			$name = substr($name, 1);
 			$cacheable = false;
 		}
-		if (strpos($name, '@INLINE ') !== false) {
-			$content = str_replace('@INLINE', '', $name);
-			/** @var modChunk $chunk */
-			$chunk = self::$modx->newObject('modChunk', array('name' => 'inline-' . uniqid()));
-			$chunk->setCacheable($cacheable);
-			$output = $chunk->process($properties, $content);
-		} elseif (self::$modx->getParser()) {
-			/** @var modChunk $chunk */
-			$chunk = self::$modx->parser->getElement('modChunk', $name);
-			if ($chunk instanceof modChunk) {
-				$chunk->setCacheable($cacheable);
-				$output = $chunk->process($properties);
+
+		if (self::$modx->getParser()) {
+			switch (true) {
+				case strpos($name, '@INLINE ') !== false:
+					$content = str_replace('@INLINE', '', $name);
+					/** @var modChunk $chunk */
+					$chunk = self::$modx->newObject('modChunk', array('name' => 'inline-' . uniqid()));
+					$chunk->set('content', $content);
+					$chunk->setCacheable($cacheable);
+					$output = $chunk->process($properties);
+					break;
+				case $chunk = self::$modx->parser->getElement('modChunk', $name) AND ($chunk instanceof modChunk):
+					$chunk->setCacheable($cacheable);
+					$output = $chunk->process($properties);
+					break;
+				case !empty($properties):
+					$output = str_replace(array('[',']','`'), array('&#91;','&#93;','&#96;'), htmlentities(print_r($properties, true), ENT_QUOTES, 'UTF-8'));
+					break;
 			}
 		}
 
