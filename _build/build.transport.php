@@ -13,15 +13,15 @@ require_once 'build.config.php';
 /* define sources */
 $root = dirname(dirname(__FILE__)) . '/';
 $sources = array(
-	'root'          => $root,
-	'build'         => $root . '_build/',
-	'data'          => $root . '_build/data/',
-	'resolvers'     => $root . '_build/resolvers/',
-	'plugins'       => $root . 'core/components/' . PKG_NAME_LOWER . '/elements/plugins/',
-	'lexicon'       => $root . 'core/components/' . PKG_NAME_LOWER . '/lexicon/',
-	'docs'          => $root . 'core/components/' . PKG_NAME_LOWER . '/docs/',
-	'source_core'   => $root . 'core/components/' . PKG_NAME_LOWER,
-	//'source_model'  => $root . 'core/model/modx/' . PKG_NAME_LOWER
+	'root'         => $root,
+	'build'        => $root . '_build/',
+	'data'         => $root . '_build/data/',
+	'resolvers'    => $root . '_build/resolvers/',
+	'plugins'      => $root . 'core/components/' . PKG_NAME_LOWER . '/elements/plugins/',
+	'lexicon'      => $root . 'core/components/' . PKG_NAME_LOWER . '/lexicon/',
+	'docs'         => $root . 'core/components/' . PKG_NAME_LOWER . '/docs/',
+	'source_core'  => $root . 'core/components/' . PKG_NAME_LOWER,
+	'source_model' => $root . 'core/model/modx/' . PKG_NAME_LOWER
 );
 unset($root);
 
@@ -126,15 +126,15 @@ $vehicle = $builder->createVehicle($category, $attr);
 	'source' => $sources['source_assets'],
 	'target' => "return MODX_ASSETS_PATH . 'components/';",
 ));*/
-/*$vehicle->resolve('file', array(
-	'source' => $sources['source_model'],
-	'target' => "return MODX_CORE_PATH . 'model/modx/';",
-));*/
+
 $vehicle->resolve('file', array(
 	'source' => $sources['source_core'],
 	'target' => "return MODX_CORE_PATH . 'components/';",
 ));
-
+$vehicle->resolve('file', array(
+	'source' => $sources['source_model'],
+	'target' => "return MODX_CORE_PATH . 'model/modx/';",
+));
 
 foreach ($BUILD_RESOLVERS as $resolver) {
 	if ($vehicle->resolve('php', array('source' => $sources['resolvers'] . 'resolve.' . $resolver . '.php'))) {
@@ -149,9 +149,9 @@ $builder->putVehicle($vehicle);
 
 /* now pack in the license file, readme and setup options */
 $builder->setPackageAttributes(array(
-	'changelog'     => file_get_contents($sources['docs'] . 'changelog.txt'),
-	'license'       => file_get_contents($sources['docs'] . 'license.txt'),
-	'readme'        => file_get_contents($sources['docs'] . 'readme.txt'),
+	'changelog' => file_get_contents($sources['docs'] . 'changelog.txt'),
+	'license'   => file_get_contents($sources['docs'] . 'license.txt'),
+	'readme'    => file_get_contents($sources['docs'] . 'readme.txt'),
 ));
 $modx->log(modX::LOG_LEVEL_INFO, 'Added package attributes and setup options.');
 

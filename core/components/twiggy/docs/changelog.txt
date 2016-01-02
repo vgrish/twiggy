@@ -1,5 +1,9 @@
 Changelog for Twiggy.
 
+1.0.5-beta (2.01.2016)
+==============
+- Add source model
+
 1.0.4-beta (2.01.2016)
 ==============
 - Add Tools Extension (resource, user, profile)
