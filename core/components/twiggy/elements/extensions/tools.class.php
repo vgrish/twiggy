@@ -165,7 +165,9 @@ class Twig_Extensions_Extension_Tools extends Twig_Extension
 	public static function filterGetField(Twig_Environment $env, $instance, $key, $format = null, $formatTemplate = null)
 	{
 		if ($instance instanceof xPDOObject) {
-			return $instance->get($key, $format, $formatTemplate);
+			if (isset($instance->_fieldMeta[$key])) {
+				return $instance->get($key, $format, $formatTemplate);
+			}
 		}
 
 		return null;
@@ -205,6 +207,10 @@ class Twig_Extensions_Extension_Tools extends Twig_Extension
 			new Twig_SimpleFunction('chunk', 'Twig_Extensions_Extension_Tools::chunk'),
 			new Twig_SimpleFunction('snippet', 'Twig_Extensions_Extension_Tools::snippet'),
 			new Twig_SimpleFunction('processor', 'Twig_Extensions_Extension_Tools::processor'),
+
+			new Twig_SimpleFunction('resource', 'Twig_Extensions_Extension_Tools::resource'),
+			new Twig_SimpleFunction('user', 'Twig_Extensions_Extension_Tools::user'),
+			new Twig_SimpleFunction('profile', 'Twig_Extensions_Extension_Tools::profile'),
 		);
 	}
 
@@ -468,36 +474,9 @@ class Twig_Extensions_Extension_Tools extends Twig_Extension
 	 *
 	 * @return mixed|string
 	 */
-	public static function chunk($name, array $properties = array())
+	public static function chunk($name, array $properties = array(), $fastMode = false)
 	{
-		$output = '';
-		$cacheable = true;
-		if (strpos($name, '!') !== false) {
-			$name = substr($name, 1);
-			$cacheable = false;
-		}
-
-		if (self::$modx->getParser()) {
-			switch (true) {
-				case strpos($name, '@INLINE ') !== false:
-					$content = str_replace('@INLINE', '', $name);
-					/** @var modChunk $chunk */
-					$chunk = self::$modx->newObject('modChunk', array('name' => 'inline-' . uniqid()));
-					$chunk->set('content', $content);
-					$chunk->setCacheable($cacheable);
-					$output = $chunk->process($properties);
-					break;
-				case $chunk = self::$modx->parser->getElement('modChunk', $name) AND ($chunk instanceof modChunk):
-					$chunk->setCacheable($cacheable);
-					$output = $chunk->process($properties);
-					break;
-				case !empty($properties):
-					$output = str_replace(array('[',']','`'), array('&#91;','&#93;','&#96;'), htmlentities(print_r($properties, true), ENT_QUOTES, 'UTF-8'));
-					break;
-			}
-		}
-
-		return $output;
+		return self::$Twiggy->getChunk($name, $properties, $fastMode);
 	}
 
 	/**
@@ -541,7 +520,7 @@ class Twig_Extensions_Extension_Tools extends Twig_Extension
 			if (!$corePath AND $ns = self::$modx->getObject('modNamespace', $namespace)) {
 				$corePath = $ns->getCorePath();
 			}
-			self::$modx->getService($namespace, $namespace, $corePath . "model/{$namespace}/", $properties);
+			self::$modx->addPackage($namespace, $corePath . "model/");
 			$options['processors_path'] = $corePath . 'processors/';
 		}
 		if (!empty($properties['location'])) {
@@ -570,5 +549,53 @@ class Twig_Extensions_Extension_Tools extends Twig_Extension
 		return $output;
 	}
 
+	/**
+	 * @param string $field
+	 *
+	 * @return mixed|null
+	 */
+	public static function resource($field = '')
+	{
+		if (is_object(self::$modx->resource) AND self::$modx->resource instanceof modResource) {
+			if (isset(self::$modx->resource->_fieldMeta[$field])) {
+				return self::$modx->resource->get($field);
+			}
+		}
 
+		return null;
+	}
+
+	/**
+	 * @param string $field
+	 *
+	 * @return mixed|null
+	 */
+	public static function user($field = '')
+	{
+		if (is_object(self::$modx->user) AND self::$modx->user instanceof modUser) {
+			if (isset(self::$modx->user->_fieldMeta[$field])) {
+				return self::$modx->user->get($field);
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param string $field
+	 *
+	 * @return mixed|null
+	 */
+	public static function profile($field = '')
+	{
+		if (is_object(self::$modx->user) AND self::$modx->user instanceof modUser) {
+			if ($profile = self::$modx->user->getOne('Profile')) {
+				if (isset($profile->_fieldMeta[$field])) {
+					return $profile->get($field);
+				}
+			}
+		}
+
+		return null;
+	}
 }

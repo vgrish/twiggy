@@ -1,5 +1,12 @@
 Changelog for Twiggy.
 
+1.0.4-beta (2.01.2016)
+==============
+- Add Tools Extension (resource, user, profile)
+- Remove parser setting from modSystemSetting
+- Add parser setting to modContextSetting
+- Add loadChunk, getChunk, parseChunk
+
 1.0.3-beta (1.01.2016)
 ==============
 - Add Tools Extension

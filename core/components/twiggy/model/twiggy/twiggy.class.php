@@ -1,10 +1,5 @@
 <?php
 
-// For debug
-ini_set('display_errors', 1);
-ini_set('error_reporting', -1);
-
-
 /**
  * The base class for Twiggy.
  */
@@ -20,8 +15,16 @@ class Twiggy
 	public $config = array();
 	/** @var string $namespace */
 	protected $namespace = 'twiggy';
-
+	/** @var  $debug */
 	protected $debug;
+
+	/** @var array $store Array for cache elements and user data */
+	public $store = array(
+		'data'     => array(),
+		'chunk'    => array(),
+		'snippet'  => array(),
+		'resource' => array(),
+	);
 
 	/**
 	 * @param modX  $modx
@@ -72,7 +75,7 @@ class Twiggy
 		if (!$config = $this->getCache($options)) {
 			$q = $this->modx->newQuery('modSystemSetting', array('area' => 'twiggy_twig'));
 			$q->select('key');
-			if ($q->prepare() && $q->stmt->execute()) {
+			if ($q->prepare() AND $q->stmt->execute()) {
 				$settings = $q->stmt->fetchAll(PDO::FETCH_COLUMN);
 				foreach ($settings as $setting) {
 					$config[str_replace('twiggy_', '', $setting)] = $this->modx->getOption($setting, null);
@@ -110,7 +113,7 @@ class Twiggy
 		if (!$templates = $this->getCache($options)) {
 			$q = $this->modx->newQuery('modTemplate');
 			$q->select('templatename,content');
-			if ($q->prepare() && $q->stmt->execute()) {
+			if ($q->prepare() AND $q->stmt->execute()) {
 				$rows = $q->stmt->fetchAll(PDO::FETCH_ASSOC);
 				foreach ($rows as $row) {
 					$templates[$row['templatename']] = $row['content'];
@@ -151,7 +154,7 @@ class Twiggy
 	/**
 	 * @return twiggyParser
 	 */
-	protected function getParser()
+	public function getParser()
 	{
 		$this->parser = $this->modx->getParser();
 		if (!($this->parser instanceof twiggyParser)) {
@@ -169,7 +172,6 @@ class Twiggy
 	 */
 	public function getTwig()
 	{
-
 		if (!$this->twig) {
 			try {
 				require_once dirname(dirname(dirname(__FILE__))) . '/vendor/Twig/vendor/autoload.php';
@@ -268,6 +270,218 @@ class Twiggy
 
 		return $content;
 	}
+
+
+	/**
+	 * This algorithm taken from
+	 * https://github.com/bezumkin/pdoTools/blob/badd69699eeb39579ac020e02c7207b6ff880c46/core/components/pdotools/model/pdotools/pdotools.class.php#L678
+	 *
+	 * @param       $name
+	 * @param array $row
+	 *
+	 * @return array|null
+	 */
+	protected function loadChunk($name, $row = array())
+	{
+		$binding = $content = $propertySet = '';
+		$name = trim($name);
+		if (preg_match('/^@([A-Z]+)/', $name, $matches)) {
+			$binding = $matches[1];
+			$content = substr($name, strlen($binding) + 1);
+			$content = ltrim($content, ' :');
+		}
+		// Get property set
+		if (!$binding AND $pos = strpos($name, '@')) {
+			$propertySet = substr($name, $pos + 1);
+			$name = substr($name, 0, $pos);
+		} elseif (in_array($binding, array('CHUNK')) AND $pos = strpos($content, '@')) {
+			$propertySet = substr($content, $pos + 1);
+			$content = substr($content, 0, $pos);
+		}
+		// Load from cache
+		$cacheName = (!empty($binding) AND ($binding != 'CHUNK')) ? sha1($name) : $name;
+		if ($chunk = $this->getStore($cacheName, 'chunk')) {
+			return $chunk;
+		}
+		$id = 0;
+		$properties = array();
+		/** @var modChunk $element */
+		switch ($binding) {
+			case 'INLINE':
+				$element = $this->modx->newObject('modChunk', array('name' => $cacheName));
+				$element->setContent($content);
+				break;
+			case 'CHUNK':
+			default:
+				if ($element = $this->modx->getObject('modChunk', array('name' => $cacheName))) {
+					$content = $element->getContent();
+					if (!empty($propertySet)) {
+						if ($tmp = $element->getPropertySet($propertySet)) {
+							$properties = $tmp;
+						}
+					} else {
+						$properties = $element->getProperties();
+					}
+					$binding = 'CHUNK';
+					$id = $element->get('id');
+				}
+				break;
+		}
+		if (!$element) {
+			return false;
+		}
+		// Preparing special tags
+		if (strpos($content, '<!--' . $this->config['nestedChunkPrefix']) !== false) {
+			preg_match_all('/\<!--' . $this->config['nestedChunkPrefix'] . '(.*?)[\s|\n|\r\n](.*?)-->/s', $content, $matches);
+			$src = $dst = $placeholders = array();
+			foreach ($matches[1] as $k => $v) {
+				$src[] = $matches[0][$k];
+				$dst[] = '';
+				$placeholders[$v] = $matches[2][$k];
+			}
+			if (!empty($src) AND !empty($dst)) {
+				$content = str_replace($src, $dst, $content);
+			}
+		} else {
+			$placeholders = array();
+		}
+		$chunk = array(
+			'object'       => $element,
+			'content'      => $content,
+			'placeholders' => $placeholders,
+			'properties'   => $properties,
+			'name'         => $cacheName,
+			'id'           => $id,
+			'binding'      => strtolower($binding),
+		);
+		$this->setStore($cacheName, $chunk, 'chunk');
+
+		return $chunk;
+	}
+
+
+	/**
+	 * This algorithm taken https://github.com/bezumkin/pdoTools/blob/badd69699eeb39579ac020e02c7207b6ff880c46/core/components/pdotools/model/pdotools/pdotools.class.php#L337
+	 *
+	 * @param string $name
+	 * @param array  $properties
+	 * @param bool   $fastMode
+	 *
+	 * @return mixed|string
+	 */
+	public function getChunk($name = '', array $properties = array(), $fastMode = false)
+	{
+		$name = trim($name);
+		if (!empty($name)) {
+			$chunk = $this->loadChunk($name, $properties);
+		}
+		if (empty($name) OR empty($chunk) OR !(isset($chunk['object']) AND $chunk['object'] instanceof modChunk)) {
+			return !empty($properties)
+				? str_replace(array('[', ']', '`'), array('&#91;', '&#93;', '&#96;'), htmlentities(print_r($properties, true), ENT_QUOTES, 'UTF-8'))
+				: '';
+		}
+		$properties = array_merge($chunk['properties'], $properties);
+		$content = $this->process($chunk, $properties);
+
+		if (strpos($content, '[[') !== false) {
+			// Processing quick placeholders
+			if (!empty($chunk['placeholders'])) {
+				$properties = $this->flattenArray($properties);
+				$pl = $chunk['placeholders'];
+				foreach ($pl as $k => $v) {
+					if ($k[0] == '!') {
+						if (empty($properties[substr($k, 1)])) {
+							$pl[substr($k, 1)] = $v;
+						}
+						unset($pl[$k]);
+					} elseif (empty($properties[$k])) {
+						$pl[$k] = '';
+					}
+				}
+				if (!empty($pl)) {
+					$pl = $this->makePlaceholders($pl);
+					$content = str_replace($pl['pl'], $pl['vl'], $content);
+				}
+			}
+			// Processing given placeholders
+			if (!empty($properties)) {
+				$pl = $this->makePlaceholders($properties);
+				$content = str_replace($pl['pl'], $pl['vl'], $content);
+			}
+		}
+		// Processing other placeholders
+		if (strpos($content, '[[') !== false) {
+			if ($fastMode) {
+				$content = $this->fastProcess($content, true);
+			} else {
+				$chunk['object']->_cacheable = false;
+				$chunk['object']->_processed = false;
+				$chunk['object']->_content = '';
+				/** @var $chunk modChunk[] */
+				$content = $chunk['object']->process($properties, $content);
+			}
+		}
+
+		return $content;
+
+	}
+
+	/**
+	 * This algorithm taken from https://github.com/bezumkin/pdoTools/blob/badd69699eeb39579ac020e02c7207b6ff880c46/core/components/pdotools/model/pdotools/pdotools.class.php#L413
+	 *
+	 * @param string $name
+	 * @param array  $properties
+	 * @param string $prefix
+	 * @param string $suffix
+	 *
+	 * @return mixed|string
+	 */
+	public function parseChunk($name = '', array $properties = array(), $prefix = '[[+', $suffix = ']]') {
+		$name = trim($name);
+		/** @var array $chunk */
+		if (!empty($name)) {
+			$chunk = $this->loadChunk($name, $properties);
+		}
+		if (empty($name) OR empty($chunk['content'])) {
+			return !empty($properties)
+				? str_replace(array('[',']','`'), array('&#91;','&#93;','&#96;'), htmlentities(print_r($properties, true), ENT_QUOTES, 'UTF-8'))
+				: '';
+		}
+		$properties = array_merge($chunk['properties'], $properties);
+		$content = $this->process($chunk, $properties);
+		if (strpos($content, '[[') !== false) {
+			$pl = $this->makePlaceholders($properties, '', $prefix, $suffix);
+			$content = str_replace($pl['pl'], $pl['vl'], $content);
+		}
+		return $content;
+	}
+
+	/**
+	 * @param      $content
+	 * @param bool $processUncacheable
+	 *
+	 * @return mixed
+	 */
+	public function fastProcess($content, $processUncacheable = true)
+	{
+		$tags = array();
+		$this->getParser()->collectElementTags($content, $tags);
+		$unprocessed = $pl = $vl = array();
+		foreach ($tags as $tag) {
+			$tmp = $this->parser->processTag($tag, $processUncacheable);
+			if ($tmp === $tag[0]) {
+				$unprocessed[] = $tmp;
+			} else {
+				$pl[] = $tag[0];
+				$vl[] = $tmp;
+			}
+		}
+		$content = str_replace($pl, $vl, $content);
+		$content = str_replace($unprocessed, '', $content);
+
+		return $content;
+	}
+
 
 	/**
 	 * Sets data to cache
@@ -381,13 +595,24 @@ class Twiggy
 	}
 
 	/**
-	 * @return bool
+	 * @param        $name
+	 * @param        $object
+	 * @param string $type
 	 */
-	public function clearTwiggyCache()
+	public function setStore($name, $object, $type = 'data')
 	{
-		$folder = rtrim(trim($this->getOption('cache', $this->config, MODX_CORE_PATH . 'cache/default/twiggy/', true)), 'cache/') . '/';
+		$this->store[$type][$name] = $object;
+	}
 
-		return $this->modx->cacheManager->deleteTree($folder, array('deleteTop' => true, 'extensions' => array('.string.php', '.cache.php', '.php')));
+	/**
+	 * @param        $name
+	 * @param string $type
+	 *
+	 * @return null
+	 */
+	public function getStore($name, $type = 'data')
+	{
+		return isset($this->store[$type][$name]) ? $this->store[$type][$name] : null;
 	}
 
 	/**
@@ -419,6 +644,71 @@ class Twiggy
 		$array = implode($delimiter, $array);
 
 		return $array;
+	}
+
+	/**
+	 * @param array  $array
+	 * @param string $prefix
+	 *
+	 * @return array
+	 */
+	public function flattenArray(array $array = array(), $prefix = '')
+	{
+		$outArray = array();
+		foreach ($array as $key => $value) {
+			if (is_array($value)) {
+				$outArray = $outArray + $this->flattenArray($value, $prefix . $key . '.');
+			} else {
+				$outArray[$prefix . $key] = $value;
+			}
+		}
+
+		return $outArray;
+	}
+
+	/**
+	 * Transform array to placeholders
+	 *
+	 * from
+	 * https://github.com/bezumkin/pdoTools/blob/56f66c3a18dfb894e3a4aafdc1a4e36973e14ac3/core/components/pdotools/model/pdotools/pdotools.class.php#L282
+	 *
+	 * @param array  $array
+	 * @param string $plPrefix
+	 * @param string $prefix
+	 * @param string $suffix
+	 * @param bool   $uncacheable
+	 *
+	 * @return array
+	 */
+	public function makePlaceholders(array $array = array(), $plPrefix = '', $prefix = '[[+', $suffix = ']]', $uncacheable = true)
+	{
+		$result = array('pl' => array(), 'vl' => array());
+		$uncached_prefix = str_replace('[[', '[[!', $prefix);
+		foreach ($array as $k => $v) {
+			if (is_array($v)) {
+				$result = array_merge_recursive($result, $this->makePlaceholders($v, $plPrefix . $k . '.', $prefix, $suffix, $uncacheable));
+			} else {
+				$pl = $plPrefix . $k;
+				$result['pl'][$pl] = $prefix . $pl . $suffix;
+				$result['vl'][$pl] = $v;
+				if ($uncacheable) {
+					$result['pl']['!' . $pl] = $uncached_prefix . $pl . $suffix;
+					$result['vl']['!' . $pl] = $v;
+				}
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function clearTwiggyCache()
+	{
+		$folder = rtrim(trim($this->getOption('cache', $this->config, MODX_CORE_PATH . 'cache/default/twiggy/', true)), 'cache/') . '/';
+
+		return $this->modx->cacheManager->deleteTree($folder, array('deleteTop' => true, 'extensions' => array('.string.php', '.cache.php', '.php')));
 	}
 
 }
