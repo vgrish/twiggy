@@ -374,7 +374,6 @@ class Twig_Environment
 			$this->setLoader($current);
 			throw $e;
 		}
-		$this->setLoader($current);
 
         return $template;
     }

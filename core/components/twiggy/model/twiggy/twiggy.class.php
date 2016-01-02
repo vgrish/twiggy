@@ -361,7 +361,8 @@ class Twiggy
 
 
 	/**
-	 * This algorithm taken https://github.com/bezumkin/pdoTools/blob/badd69699eeb39579ac020e02c7207b6ff880c46/core/components/pdotools/model/pdotools/pdotools.class.php#L337
+	 * This algorithm taken
+	 * https://github.com/bezumkin/pdoTools/blob/badd69699eeb39579ac020e02c7207b6ff880c46/core/components/pdotools/model/pdotools/pdotools.class.php#L337
 	 *
 	 * @param string $name
 	 * @param array  $properties
@@ -427,7 +428,8 @@ class Twiggy
 	}
 
 	/**
-	 * This algorithm taken from https://github.com/bezumkin/pdoTools/blob/badd69699eeb39579ac020e02c7207b6ff880c46/core/components/pdotools/model/pdotools/pdotools.class.php#L413
+	 * This algorithm taken from
+	 * https://github.com/bezumkin/pdoTools/blob/badd69699eeb39579ac020e02c7207b6ff880c46/core/components/pdotools/model/pdotools/pdotools.class.php#L413
 	 *
 	 * @param string $name
 	 * @param array  $properties
@@ -436,7 +438,8 @@ class Twiggy
 	 *
 	 * @return mixed|string
 	 */
-	public function parseChunk($name = '', array $properties = array(), $prefix = '[[+', $suffix = ']]') {
+	public function parseChunk($name = '', array $properties = array(), $prefix = '[[+', $suffix = ']]')
+	{
 		$name = trim($name);
 		/** @var array $chunk */
 		if (!empty($name)) {
@@ -444,7 +447,7 @@ class Twiggy
 		}
 		if (empty($name) OR empty($chunk['content'])) {
 			return !empty($properties)
-				? str_replace(array('[',']','`'), array('&#91;','&#93;','&#96;'), htmlentities(print_r($properties, true), ENT_QUOTES, 'UTF-8'))
+				? str_replace(array('[', ']', '`'), array('&#91;', '&#93;', '&#96;'), htmlentities(print_r($properties, true), ENT_QUOTES, 'UTF-8'))
 				: '';
 		}
 		$properties = array_merge($chunk['properties'], $properties);
@@ -453,6 +456,7 @@ class Twiggy
 			$pl = $this->makePlaceholders($properties, '', $prefix, $suffix);
 			$content = str_replace($pl['pl'], $pl['vl'], $content);
 		}
+
 		return $content;
 	}
 

@@ -11,27 +11,27 @@ $tmp = array(
 	),
 	'path_extensions' => array(
 		'xtype' => 'textfield',
-		'value' => '{base_path}twiggy/core/components/twiggy/elements/extensions/',
+		//'value' => '{base_path}twiggy/core/components/twiggy/elements/extensions/',
 
-		//'value' => '{core_path}components/twiggy/elements/extensions/',
+		'value' => '{core_path}components/twiggy/elements/extensions/',
 		'area'  => 'twiggy_main',
 	),
-	'path_templates' => array(
+	'path_templates'  => array(
 		'xtype' => 'textarea',
-		'value' => '{base_path}twiggy/core/components/twiggy/elements/templates/',
+		//'value' => '{base_path}twiggy/core/components/twiggy/elements/templates/',
 
-		//'value' => '{core_path}components/twiggy/elements/templates/',
+		'value' => '{core_path}components/twiggy/elements/templates/',
 		'area'  => 'twiggy_main',
 	),
 	'extensions'      => array(
 		'xtype' => 'textarea',
-		'value' => 'UniqID,Text,Pcre,Cache,Tools',//'UniqID,Text,Pcre,Cache',
+		'value' => 'Tools,Cache,Pcre',
 		'area'  => 'twiggy_main',
 	),
 
 	'debug'           => array(
 		'xtype' => 'combo-boolean',
-		'value' => true,
+		'value' => false,
 		'area'  => 'twiggy_twig',
 	),
 	'autoescape'      => array(
@@ -44,14 +44,15 @@ $tmp = array(
 		'value' => '{core_path}cache/default/twiggy/cache/',
 		'area'  => 'twiggy_twig',
 	),
-	'template'        => array(
+
+	/*'template'        => array(
 		'xtype' => 'textfield',
 		'value' => '{core_path}components/twiggy/elements/templates/',
 		'area'  => 'twiggy_twig',
-	),
+	),*/
 
 
-	'assets_path'     => array(
+/*	'assets_path'     => array(
 		'value' => '{base_path}twiggy/assets/components/twiggy/',
 		'xtype' => 'textfield',
 		'area'  => 'twiggy_temp',
@@ -65,7 +66,7 @@ $tmp = array(
 		'value' => '{base_path}twiggy/core/components/twiggy/',
 		'xtype' => 'textfield',
 		'area'  => 'twiggy_temp',
-	),
+	),*/
 
 );
 
