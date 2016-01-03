@@ -1,5 +1,9 @@
 Changelog for Twiggy.
 
+1.0.7-beta (4.01.2016)
+==============
+- Improvement loadChunk
+
 1.0.6-beta (3.01.2016)
 ==============
 - Add Sandbox mode

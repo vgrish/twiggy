@@ -174,6 +174,7 @@ class Twiggy
 	{
 		if (!$this->twig) {
 			try {
+
 				require_once dirname(dirname(dirname(__FILE__))) . '/vendor/Twig/vendor/autoload.php';
 
 				/* get $templates */
@@ -318,55 +319,47 @@ class Twiggy
 	 */
 	protected function loadChunk($name, $row = array())
 	{
-		$binding = $content = $propertySet = '';
 		$name = trim($name);
-		if (preg_match('/^@([A-Z]+)/', $name, $matches)) {
-			$binding = $matches[1];
-			$content = substr($name, strlen($binding) + 1);
-			$content = ltrim($content, ' :');
+		$content = '';
+
+		switch (true) {
+			case strpos($name, '@INLINE ') !== false:
+				$cacheName = crc32($name);
+				$binding = 'INLINE';
+				break;
+			default:
+				$cacheName = $name;
+				$binding = 'CHUNK';
+				break;
 		}
-		// Get property set
-		if (!$binding AND $pos = strpos($name, '@')) {
-			$propertySet = substr($name, $pos + 1);
-			$name = substr($name, 0, $pos);
-		} elseif (in_array($binding, array('CHUNK')) AND $pos = strpos($content, '@')) {
-			$propertySet = substr($content, $pos + 1);
-			$content = substr($content, 0, $pos);
-		}
-		// Load from cache
-		$cacheName = (!empty($binding) AND ($binding != 'CHUNK')) ? sha1($name) : $name;
+
 		if ($chunk = $this->getStore($cacheName, 'chunk')) {
 			return $chunk;
 		}
+
 		$id = 0;
 		$properties = array();
 		/** @var modChunk $element */
 		switch ($binding) {
 			case 'INLINE':
 				$element = $this->modx->newObject('modChunk', array('name' => $cacheName));
+				$content = str_replace('@INLINE', '', $name);
 				$element->setContent($content);
 				break;
 			case 'CHUNK':
-			default:
-				if ($element = $this->modx->getObject('modChunk', array('name' => $cacheName))) {
+				if ($element = $this->modx->getObject('modChunk', array('name' => $name))) {
 					$content = $element->getContent();
-					if (!empty($propertySet)) {
-						if ($tmp = $element->getPropertySet($propertySet)) {
-							$properties = $tmp;
-						}
-					} else {
-						$properties = $element->getProperties();
-					}
-					$binding = 'CHUNK';
 					$id = $element->get('id');
 				}
 				break;
 		}
+
 		if (!$element) {
 			return false;
 		}
+
 		// Preparing special tags
-		if (strpos($content, '<!--' . $this->config['nestedChunkPrefix']) !== false) {
+		if (!empty($this->config['nestedChunkPrefix']) AND strpos($content, '<!--' . $this->config['nestedChunkPrefix']) !== false) {
 			preg_match_all('/\<!--' . $this->config['nestedChunkPrefix'] . '(.*?)[\s|\n|\r\n](.*?)-->/s', $content, $matches);
 			$src = $dst = $placeholders = array();
 			foreach ($matches[1] as $k => $v) {
@@ -374,12 +367,14 @@ class Twiggy
 				$dst[] = '';
 				$placeholders[$v] = $matches[2][$k];
 			}
+
 			if (!empty($src) AND !empty($dst)) {
 				$content = str_replace($src, $dst, $content);
 			}
 		} else {
 			$placeholders = array();
 		}
+
 		$chunk = array(
 			'object'       => $element,
 			'content'      => $content,
@@ -389,6 +384,7 @@ class Twiggy
 			'id'           => $id,
 			'binding'      => strtolower($binding),
 		);
+
 		$this->setStore($cacheName, $chunk, 'chunk');
 
 		return $chunk;
@@ -626,9 +622,7 @@ class Twiggy
 		if (!empty($options['cache_key'])) {
 			return $options['cache_key'];
 		}
-		$key = !empty($this->modx->resource)
-			? $this->modx->resource->getCacheKey()
-			: '';
+		$key = !empty($this->modx->resource) ? $this->modx->resource->getCacheKey() : '';
 
 		return $key . '/' . sha1(serialize($options));
 	}
