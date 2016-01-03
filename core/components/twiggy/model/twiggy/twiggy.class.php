@@ -69,7 +69,7 @@ class Twiggy
 	{
 		/* array cache $options */
 		$options = array(
-			'cache_key' => 'config/123456',
+			'cache_key' => 'config/twiggy_twig',
 			'cacheTime' => 0,
 		);
 		if (!$config = $this->getCache($options)) {
@@ -189,7 +189,42 @@ class Twiggy
 					$this->twig->addExtension(new Twig_Extension_Debug());
 				}
 
-				/** load $extensions */
+				/** load sandbox */
+				$sandbox = (boolean)$this->getOption('sandbox', $this->config, false, true);
+				if ($sandbox) {
+					/* array cache $options */
+					$options = array(
+						'cache_key' => 'config/twiggy_sandbox',
+						'cacheTime' => 0,
+					);
+					if (!$sandboxConfig = $this->getCache($options)) {
+						$sandboxTags = $this->explodeAndClean($this->getOption('sandbox_tags', $this->config, '', true));
+						$sandboxFilters = $this->explodeAndClean($this->getOption('sandbox_filters', $this->config, '', true));
+						$sandboxMethods = $this->modx->fromJSON($this->getOption('sandbox_methods', $this->config, "{}", true));
+						$sandboxProperties = $this->modx->fromJSON($this->getOption('sandbox_properties', $this->config, "{}", true));
+						$sandboxFunctions = $this->explodeAndClean($this->getOption('sandbox_functions', $this->config, '', true));
+						$sandboxConfig = array(
+							'tags'       => $sandboxTags,
+							'filters'    => $sandboxFilters,
+							'methods'    => $sandboxMethods,
+							'properties' => $sandboxProperties,
+							'functions'  => $sandboxFunctions
+						);
+						$this->setCache($sandboxConfig, $options);
+					}
+
+					$sandboxPolicy = new Twig_Sandbox_SecurityPolicy(
+						$sandboxConfig['tags'],
+						$sandboxConfig['filters'],
+						$sandboxConfig['methods'],
+						$sandboxConfig['properties'],
+						$sandboxConfig['functions']
+					);
+					$sandboxExtension = new Twig_Extension_Sandbox($sandboxPolicy);
+					$this->twig->addExtension($sandboxExtension);
+				}
+
+				/** load external $extensions */
 				$extensions = $this->explodeAndClean($this->getOption('extensions', $this->config, '', true));
 				if (!empty($extensions)) {
 					$pathExtensions = trim($this->getOption('path_extensions', $this->config, '', true));
