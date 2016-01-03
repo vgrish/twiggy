@@ -173,14 +173,16 @@ class Twig_Extensions_Extension_Tools extends Twig_Extension
 		return null;
 	}
 
-
 	/**
 	 * @return array
 	 */
 	public function getFunctions()
 	{
 		return array(
+			new Twig_SimpleFunction('loadLexicon', 'Twig_Extensions_Extension_Tools::loadLexicon'),
 			new Twig_SimpleFunction('lexicon', 'Twig_Extensions_Extension_Tools::lexicon'),
+			new Twig_SimpleFunction('_', 'Twig_Extensions_Extension_Tools::lexicon'),
+
 			new Twig_SimpleFunction('makeUrl', 'Twig_Extensions_Extension_Tools::makeUrl'),
 			new Twig_SimpleFunction('toJson', 'Twig_Extensions_Extension_Tools::toJson'),
 			new Twig_SimpleFunction('fromJson', 'Twig_Extensions_Extension_Tools::fromJson'),
@@ -225,6 +227,20 @@ class Twig_Extensions_Extension_Tools extends Twig_Extension
 	public static function getOption($key, $options = null, $default = null, $skipEmpty = false)
 	{
 		return self::$modx->getOption($key, $options, $default, $skipEmpty);
+	}
+
+
+	/**
+	 * 'ru:core:default'
+	 *
+	 * @param $key
+	 */
+	public static function loadLexicon($key)
+	{
+		if (!self::$modx->lexicon) {
+			self::$modx->getService('lexicon', 'modLexicon');
+		}
+		self::$modx->lexicon->load($key);
 	}
 
 	/**
