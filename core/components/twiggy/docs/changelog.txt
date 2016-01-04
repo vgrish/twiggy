@@ -1,5 +1,9 @@
 Changelog for Twiggy.
 
+1.0.8-beta (5.01.2016)
+==============
+- Add validate phpversion
+
 1.0.7-beta (4.01.2016)
 ==============
 - Improvement loadChunk
