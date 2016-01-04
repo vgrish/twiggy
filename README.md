@@ -116,6 +116,18 @@ Add extension and template inheritance.
 
 ```
 
+## DEBUG BAR ## / http://phpdebugbar.com
+
+```
+{% if hasSessionContext('mgr') %}
+
+{{ dbgHead() }}
+{{ dbgMessage(array) }}
+{{ dbgRender() }}
+
+{% endif %}
+```
+
 ## PCRE ##
 
 * preg_quote   - Quote regular expression characters

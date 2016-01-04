@@ -13,16 +13,17 @@ require_once 'build.config.php';
 /* define sources */
 $root = dirname(dirname(__FILE__)) . '/';
 $sources = array(
-	'root'         => $root,
-	'build'        => $root . '_build/',
-	'data'         => $root . '_build/data/',
-	'validators'   => $root . '_build/validators/',
-	'resolvers'    => $root . '_build/resolvers/',
-	'plugins'      => $root . 'core/components/' . PKG_NAME_LOWER . '/elements/plugins/',
-	'lexicon'      => $root . 'core/components/' . PKG_NAME_LOWER . '/lexicon/',
-	'docs'         => $root . 'core/components/' . PKG_NAME_LOWER . '/docs/',
-	'source_core'  => $root . 'core/components/' . PKG_NAME_LOWER,
-	'source_model' => $root . 'core/model/modx/' . PKG_NAME_LOWER
+	'root'          => $root,
+	'build'         => $root . '_build/',
+	'data'          => $root . '_build/data/',
+	'validators'    => $root . '_build/validators/',
+	'resolvers'     => $root . '_build/resolvers/',
+	'plugins'       => $root . 'core/components/' . PKG_NAME_LOWER . '/elements/plugins/',
+	'lexicon'       => $root . 'core/components/' . PKG_NAME_LOWER . '/lexicon/',
+	'docs'          => $root . 'core/components/' . PKG_NAME_LOWER . '/docs/',
+	'source_core'   => $root . 'core/components/' . PKG_NAME_LOWER,
+	'source_model'  => $root . 'core/model/modx/' . PKG_NAME_LOWER,
+	'source_assets' => $root . 'assets/components/' . PKG_NAME_LOWER,
 );
 unset($root);
 
@@ -132,11 +133,6 @@ foreach ($BUILD_VALIDATORS as $validate) {
 }
 
 /* now pack in resolvers */
-/*$vehicle->resolve('file', array(
-	'source' => $sources['source_assets'],
-	'target' => "return MODX_ASSETS_PATH . 'components/';",
-));*/
-
 $vehicle->resolve('file', array(
 	'source' => $sources['source_core'],
 	'target' => "return MODX_CORE_PATH . 'components/';",
@@ -144,6 +140,10 @@ $vehicle->resolve('file', array(
 $vehicle->resolve('file', array(
 	'source' => $sources['source_model'],
 	'target' => "return MODX_CORE_PATH . 'model/modx/';",
+));
+$vehicle->resolve('file', array(
+	'source' => $sources['source_assets'],
+	'target' => "return MODX_ASSETS_PATH . 'components/';",
 ));
 
 foreach ($BUILD_RESOLVERS as $resolver) {

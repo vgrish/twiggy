@@ -1,5 +1,9 @@
 Changelog for Twiggy.
 
+1.0.9-beta (5.01.2016)
+==============
+- Add Debug Bar
+
 1.0.8-beta (5.01.2016)
 ==============
 - Add validate phpversion

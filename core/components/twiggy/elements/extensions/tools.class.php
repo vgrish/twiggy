@@ -213,6 +213,12 @@ class Twig_Extensions_Extension_Tools extends Twig_Extension
 			new Twig_SimpleFunction('resource', 'Twig_Extensions_Extension_Tools::resource'),
 			new Twig_SimpleFunction('user', 'Twig_Extensions_Extension_Tools::user'),
 			new Twig_SimpleFunction('profile', 'Twig_Extensions_Extension_Tools::profile'),
+
+			new Twig_SimpleFunction('isMember', 'Twig_Extensions_Extension_Tools::isMember'),
+			new Twig_SimpleFunction('isAuthenticated', 'Twig_Extensions_Extension_Tools::isAuthenticated'),
+			new Twig_SimpleFunction('hasSessionContext', 'Twig_Extensions_Extension_Tools::hasSessionContext'),
+			new Twig_SimpleFunction('hasPermission', 'Twig_Extensions_Extension_Tools::hasPermission')
+
 		);
 	}
 
@@ -614,4 +620,47 @@ class Twig_Extensions_Extension_Tools extends Twig_Extension
 
 		return null;
 	}
+
+
+	/**
+	 * @param      $groups
+	 * @param bool $matchAll
+	 *
+	 * @return bool
+	 */
+	public static function isMember($groups, $matchAll = false)
+	{
+		return self::$modx->user->isMember($groups, $matchAll);
+	}
+
+	/**
+	 * @param string $context
+	 *
+	 * @return bool
+	 */
+	public static function isAuthenticated($context = 'web')
+	{
+		return self::$modx->user->isAuthenticated($context);
+	}
+
+	/**
+	 * @param string $context
+	 *
+	 * @return bool
+	 */
+	public static function hasSessionContext($context = 'web')
+	{
+		return self::$modx->user->hasSessionContext($context);
+	}
+
+	/**
+	 * @param $pm
+	 *
+	 * @return bool
+	 */
+	public static function hasPermission($pm)
+	{
+		return self::$modx->hasPermission($pm);
+	}
+
 }
