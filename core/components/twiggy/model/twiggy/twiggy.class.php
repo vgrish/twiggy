@@ -229,12 +229,9 @@ class Twiggy
 				$extensions = $this->explodeAndClean($this->getOption('extensions', $this->config, '', true));
 				if (!empty($extensions)) {
 					$pathExtensions = trim($this->getOption('path_extensions', $this->config, '', true));
-					$this->loadExtensions($pathExtensions);
 					foreach ($extensions as $extension) {
-						$extension = 'Twig_Extensions_Extension_' . $extension;
-						${$extension} = new $extension($this);
-						if (class_exists($extension) AND ${$extension} instanceof Twig_Extension) {
-							$this->twig->addExtension(${$extension});
+						if ($extensionClass = $this->modx->loadClass('TwiggyExtension' . $extension, $pathExtensions, false, true)) {
+							$this->twig->addExtension(new $extensionClass($this));
 						}
 					}
 				}
@@ -251,20 +248,7 @@ class Twiggy
 
 		return $this->twig;
 	}
-
-	/**
-	 * @param $path
-	 */
-	public function loadExtensions($path)
-	{
-		$files = scandir($path);
-		foreach ($files as $file) {
-			if (preg_match('/.*?\.class\.php$/i', $file)) {
-				include_once($path . '/' . $file);
-			}
-		}
-	}
-
+	
 	/**
 	 * setGlobals
 	 */

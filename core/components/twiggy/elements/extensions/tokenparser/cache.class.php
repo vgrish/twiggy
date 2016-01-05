@@ -1,6 +1,6 @@
 <?php
 
-class Cache extends \Twig_TokenParser
+class Cache extends Twig_TokenParser
 {
 
 	/**
@@ -8,7 +8,7 @@ class Cache extends \Twig_TokenParser
 	 *
 	 * @return bool
 	 */
-	public function decideCacheEnd(\Twig_Token $token)
+	public function decideCacheEnd(Twig_Token $token)
 	{
 		return $token->test('endcache');
 	}
@@ -27,15 +27,15 @@ class Cache extends \Twig_TokenParser
 	 * @return CacheNode
 	 * @throws Twig_Error_Syntax
 	 */
-	public function parse(\Twig_Token $token)
+	public function parse(Twig_Token $token)
 	{
 		$lineno = $token->getLine();
 		$stream = $this->parser->getStream();
 		$annotation = $this->parser->getExpressionParser()->parseExpression();
 		$key = $this->parser->getExpressionParser()->parseExpression();
-		$stream->expect(\Twig_Token::BLOCK_END_TYPE);
+		$stream->expect(Twig_Token::BLOCK_END_TYPE);
 		$body = $this->parser->subparse(array($this, 'decideCacheEnd'), true);
-		$stream->expect(\Twig_Token::BLOCK_END_TYPE);
+		$stream->expect(Twig_Token::BLOCK_END_TYPE);
 
 		return new CacheNode($annotation, $key, $body, $lineno, $this->getTag());
 	}

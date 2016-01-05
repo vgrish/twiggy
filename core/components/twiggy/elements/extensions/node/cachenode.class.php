@@ -1,7 +1,7 @@
 <?php
 
 
-class CacheNode extends \Twig_Node
+class CacheNode extends Twig_Node
 {
 	private static $cacheCount = 1;
 
@@ -12,7 +12,7 @@ class CacheNode extends \Twig_Node
 	 * @param null|string          $lineno
 	 * @param null                 $tag
 	 */
-	public function __construct(\Twig_Node_Expression $annotation, \Twig_Node_Expression $keyInfo, $body, $lineno, $tag = null)
+	public function __construct(Twig_Node_Expression $annotation, Twig_Node_Expression $keyInfo, $body, $lineno, $tag = null)
 	{
 		parent::__construct(array('key_info' => $keyInfo, 'body' => $body, 'annotation' => $annotation), array(), $lineno, $tag);
 	}
@@ -20,7 +20,7 @@ class CacheNode extends \Twig_Node
 	/**
 	 * {@inheritDoc}
 	 */
-	public function compile(\Twig_Compiler $compiler)
+	public function compile(Twig_Compiler $compiler)
 	{
 		$i = self::$cacheCount++;
 		$compiler

@@ -2,7 +2,7 @@
 
 require_once dirname(dirname(dirname(__FILE__))) . '/vendor/Debugbar/vendor/autoload.php';
 
-class Twig_Extensions_Extension_DebugBar extends Twig_Extension
+class TwiggyExtensionDebugBar extends Twig_Extension
 {
 	/** @var $debugbar */
 	static private $debugbar;
@@ -35,9 +35,9 @@ class Twig_Extensions_Extension_DebugBar extends Twig_Extension
 	public function getFunctions()
 	{
 		return array(
-			new Twig_SimpleFunction('dbgHead', 'Twig_Extensions_Extension_DebugBar::renderHead'),
-			new Twig_SimpleFunction('dbgMessage', 'Twig_Extensions_Extension_DebugBar::addMessage'),
-			new Twig_SimpleFunction('dbgRender', 'Twig_Extensions_Extension_DebugBar::render'),
+			new Twig_SimpleFunction('dbgHead', 'TwiggyExtensionDebugBar::renderHead'),
+			new Twig_SimpleFunction('dbgMessage', 'TwiggyExtensionDebugBar::addMessage'),
+			new Twig_SimpleFunction('dbgRender', 'TwiggyExtensionDebugBar::render'),
 		);
 
 	}

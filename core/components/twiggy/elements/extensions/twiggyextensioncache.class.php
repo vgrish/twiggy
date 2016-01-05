@@ -3,7 +3,7 @@
 require_once dirname(__FILE__) . '/node/cachenode.class.php';
 require_once dirname(__FILE__) . '/tokenparser/cache.class.php';
 
-class Twig_Extensions_Extension_Cache extends Twig_Extension
+class TwiggyExtensionCache extends Twig_Extension
 {
 	/** @var MODx $modx */
 	private $modx;

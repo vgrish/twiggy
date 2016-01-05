@@ -1,7 +1,7 @@
 <?php
 
 
-class Twiggy_Pcre_Filters
+class TwiggyPcreFilters
 {
 	/**
 	 * @param Twig_Environment $env
@@ -157,7 +157,7 @@ class Twiggy_Pcre_Filters
 /**
  * Class Twig_Extensions_Extension_Pcre
  */
-class Twig_Extensions_Extension_Pcre extends Twig_Extension
+class TwiggyExtensionPcre extends Twig_Extension
 {
 	/**
 	 * Class constructor
@@ -183,28 +183,28 @@ class Twig_Extensions_Extension_Pcre extends Twig_Extension
 	public function getFilters()
 	{
 		return array(
-			new Twig_SimpleFilter('preg_quote', 'Twiggy_Pcre_Filters::quote', array(
+			new Twig_SimpleFilter('preg_quote', 'TwiggyPcreFilters::quote', array(
 				'needs_environment' => true,
 			)),
-			new Twig_SimpleFilter('preg_match', 'Twiggy_Pcre_Filters::match', array(
+			new Twig_SimpleFilter('preg_match', 'TwiggyPcreFilters::match', array(
 				'needs_environment' => true,
 			)),
-			new Twig_SimpleFilter('preg_get', 'Twiggy_Pcre_Filters::get', array(
+			new Twig_SimpleFilter('preg_get', 'TwiggyPcreFilters::get', array(
 				'needs_environment' => true,
 			)),
-			new Twig_SimpleFilter('preg_get_all', 'Twiggy_Pcre_Filters::getAll', array(
+			new Twig_SimpleFilter('preg_get_all', 'TwiggyPcreFilters::getAll', array(
 				'needs_environment' => true,
 			)),
-			new Twig_SimpleFilter('preg_grep', 'Twiggy_Pcre_Filters::grep', array(
+			new Twig_SimpleFilter('preg_grep', 'TwiggyPcreFilters::grep', array(
 				'needs_environment' => true,
 			)),
-			new Twig_SimpleFilter('preg_replace', 'Twiggy_Pcre_Filters::replace', array(
+			new Twig_SimpleFilter('preg_replace', 'TwiggyPcreFilters::replace', array(
 				'needs_environment' => true,
 			)),
-			new Twig_SimpleFilter('preg_filter', 'Twiggy_Pcre_Filters::filter', array(
+			new Twig_SimpleFilter('preg_filter', 'TwiggyPcreFilters::filter', array(
 				'needs_environment' => true,
 			)),
-			new Twig_SimpleFilter('preg_split', 'Twiggy_Pcre_Filters::split', array(
+			new Twig_SimpleFilter('preg_split', 'TwiggyPcreFilters::split', array(
 				'needs_environment' => true,
 			)),
 		);

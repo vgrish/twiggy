@@ -10,7 +10,7 @@
  *
  * @author Henrik Bjornskov <hb@peytz.dk>
  */
-class Twig_Extensions_Extension_Text extends Twig_Extension
+class TwiggyExtensionText extends Twig_Extension
 {
 	/**
 	 * Name of this extension.

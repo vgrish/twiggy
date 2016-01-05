@@ -1,6 +1,6 @@
 <?php
 
-class Twig_Extensions_Extension_Tools extends Twig_Extension
+class TwiggyExtensionTools extends Twig_Extension
 {
 	/** @var MODx $modx */
 	static private $modx;
@@ -30,28 +30,28 @@ class Twig_Extensions_Extension_Tools extends Twig_Extension
 	public function getFilters()
 	{
 		return array(
-			new Twig_SimpleFilter('pls', 'Twig_Extensions_Extension_Tools::filterGetPls', array(
+			new Twig_SimpleFilter('pls', 'TwiggyExtensionTools::filterGetPls', array(
 				'needs_environment' => true
 			)),
-			new Twig_SimpleFilter('option', 'Twig_Extensions_Extension_Tools::filterGetOption', array(
+			new Twig_SimpleFilter('option', 'TwiggyExtensionTools::filterGetOption', array(
 				'needs_environment' => true
 			)),
-			new Twig_SimpleFilter('lexicon', 'Twig_Extensions_Extension_Tools::filterLexicon', array(
+			new Twig_SimpleFilter('lexicon', 'TwiggyExtensionTools::filterLexicon', array(
 				'needs_environment' => true
 			)),
-			new Twig_SimpleFilter('makeUrl', 'Twig_Extensions_Extension_Tools::filterMakeUrl', array(
+			new Twig_SimpleFilter('makeUrl', 'TwiggyExtensionTools::filterMakeUrl', array(
 				'needs_environment' => true
 			)),
-			new Twig_SimpleFilter('toJson', 'Twig_Extensions_Extension_Tools::filterToJson', array(
+			new Twig_SimpleFilter('toJson', 'TwiggyExtensionTools::filterToJson', array(
 				'needs_environment' => true
 			)),
-			new Twig_SimpleFilter('fromJson', 'Twig_Extensions_Extension_Tools::filterFromJson', array(
+			new Twig_SimpleFilter('fromJson', 'TwiggyExtensionTools::filterFromJson', array(
 				'needs_environment' => true
 			)),
-			new Twig_SimpleFilter('toArray', 'Twig_Extensions_Extension_Tools::filterToArray', array(
+			new Twig_SimpleFilter('toArray', 'TwiggyExtensionTools::filterToArray', array(
 				'needs_environment' => true
 			)),
-			new Twig_SimpleFilter('field', 'Twig_Extensions_Extension_Tools::filterGetField', array(
+			new Twig_SimpleFilter('field', 'TwiggyExtensionTools::filterGetField', array(
 				'needs_environment' => true
 			)),
 		);
@@ -179,45 +179,45 @@ class Twig_Extensions_Extension_Tools extends Twig_Extension
 	public function getFunctions()
 	{
 		return array(
-			new Twig_SimpleFunction('loadLexicon', 'Twig_Extensions_Extension_Tools::loadLexicon'),
-			new Twig_SimpleFunction('lexicon', 'Twig_Extensions_Extension_Tools::lexicon'),
-			new Twig_SimpleFunction('_', 'Twig_Extensions_Extension_Tools::lexicon'),
+			new Twig_SimpleFunction('loadLexicon', 'TwiggyExtensionTools::loadLexicon'),
+			new Twig_SimpleFunction('lexicon', 'TwiggyExtensionTools::lexicon'),
+			new Twig_SimpleFunction('_', 'TwiggyExtensionTools::lexicon'),
 
-			new Twig_SimpleFunction('makeUrl', 'Twig_Extensions_Extension_Tools::makeUrl'),
-			new Twig_SimpleFunction('toJson', 'Twig_Extensions_Extension_Tools::toJson'),
-			new Twig_SimpleFunction('fromJson', 'Twig_Extensions_Extension_Tools::fromJson'),
-			new Twig_SimpleFunction('toArray', 'Twig_Extensions_Extension_Tools::toArray'),
-			new Twig_SimpleFunction('getField', 'Twig_Extensions_Extension_Tools::getField'),
-			new Twig_SimpleFunction('getCount', 'Twig_Extensions_Extension_Tools::getCount'),
-			new Twig_SimpleFunction('getObject', 'Twig_Extensions_Extension_Tools::getObject'),
-			new Twig_SimpleFunction('sendError', 'Twig_Extensions_Extension_Tools::sendError'),
-			new Twig_SimpleFunction('sendRedirect', 'Twig_Extensions_Extension_Tools::sendRedirect'),
-			new Twig_SimpleFunction('sendForward', 'Twig_Extensions_Extension_Tools::sendForward'),
-			new Twig_SimpleFunction('setPlaceholder', 'Twig_Extensions_Extension_Tools::setPlaceholder'),
-			new Twig_SimpleFunction('setPlaceholders', 'Twig_Extensions_Extension_Tools::setPlaceholders'),
-			new Twig_SimpleFunction('toPlaceholder', 'Twig_Extensions_Extension_Tools::toPlaceholder'),
-			new Twig_SimpleFunction('toPlaceholders', 'Twig_Extensions_Extension_Tools::toPlaceholders'),
-			new Twig_SimpleFunction('getPlaceholder', 'Twig_Extensions_Extension_Tools::getPlaceholder'),
-			new Twig_SimpleFunction('getPlaceholders', 'Twig_Extensions_Extension_Tools::getPlaceholders'),
-			new Twig_SimpleFunction('unsetPlaceholder', 'Twig_Extensions_Extension_Tools::unsetPlaceholder'),
-			new Twig_SimpleFunction('unsetPlaceholders', 'Twig_Extensions_Extension_Tools::unsetPlaceholders'),
-			new Twig_SimpleFunction('getOption', 'Twig_Extensions_Extension_Tools::getOption'),
-			new Twig_SimpleFunction('getPls', 'Twig_Extensions_Extension_Tools::getPlaceholder'),
+			new Twig_SimpleFunction('makeUrl', 'TwiggyExtensionTools::makeUrl'),
+			new Twig_SimpleFunction('toJson', 'TwiggyExtensionTools::toJson'),
+			new Twig_SimpleFunction('fromJson', 'TwiggyExtensionTools::fromJson'),
+			new Twig_SimpleFunction('toArray', 'TwiggyExtensionTools::toArray'),
+			new Twig_SimpleFunction('getField', 'TwiggyExtensionTools::getField'),
+			new Twig_SimpleFunction('getCount', 'TwiggyExtensionTools::getCount'),
+			new Twig_SimpleFunction('getObject', 'TwiggyExtensionTools::getObject'),
+			new Twig_SimpleFunction('sendError', 'TwiggyExtensionTools::sendError'),
+			new Twig_SimpleFunction('sendRedirect', 'TwiggyExtensionTools::sendRedirect'),
+			new Twig_SimpleFunction('sendForward', 'TwiggyExtensionTools::sendForward'),
+			new Twig_SimpleFunction('setPlaceholder', 'TwiggyExtensionTools::setPlaceholder'),
+			new Twig_SimpleFunction('setPlaceholders', 'TwiggyExtensionTools::setPlaceholders'),
+			new Twig_SimpleFunction('toPlaceholder', 'TwiggyExtensionTools::toPlaceholder'),
+			new Twig_SimpleFunction('toPlaceholders', 'TwiggyExtensionTools::toPlaceholders'),
+			new Twig_SimpleFunction('getPlaceholder', 'TwiggyExtensionTools::getPlaceholder'),
+			new Twig_SimpleFunction('getPlaceholders', 'TwiggyExtensionTools::getPlaceholders'),
+			new Twig_SimpleFunction('unsetPlaceholder', 'TwiggyExtensionTools::unsetPlaceholder'),
+			new Twig_SimpleFunction('unsetPlaceholders', 'TwiggyExtensionTools::unsetPlaceholders'),
+			new Twig_SimpleFunction('getOption', 'TwiggyExtensionTools::getOption'),
+			new Twig_SimpleFunction('getPls', 'TwiggyExtensionTools::getPlaceholder'),
 
-			new Twig_SimpleFunction('var_dump', 'Twig_Extensions_Extension_Tools::var_dump'),
-			new Twig_SimpleFunction('log', 'Twig_Extensions_Extension_Tools::log'),
-			new Twig_SimpleFunction('chunk', 'Twig_Extensions_Extension_Tools::chunk'),
-			new Twig_SimpleFunction('snippet', 'Twig_Extensions_Extension_Tools::snippet'),
-			new Twig_SimpleFunction('processor', 'Twig_Extensions_Extension_Tools::processor'),
+			new Twig_SimpleFunction('var_dump', 'TwiggyExtensionTools::var_dump'),
+			new Twig_SimpleFunction('log', 'TwiggyExtensionTools::log'),
+			new Twig_SimpleFunction('chunk', 'TwiggyExtensionTools::chunk'),
+			new Twig_SimpleFunction('snippet', 'TwiggyExtensionTools::snippet'),
+			new Twig_SimpleFunction('processor', 'TwiggyExtensionTools::processor'),
 
-			new Twig_SimpleFunction('resource', 'Twig_Extensions_Extension_Tools::resource'),
-			new Twig_SimpleFunction('user', 'Twig_Extensions_Extension_Tools::user'),
-			new Twig_SimpleFunction('profile', 'Twig_Extensions_Extension_Tools::profile'),
+			new Twig_SimpleFunction('resource', 'TwiggyExtensionTools::resource'),
+			new Twig_SimpleFunction('user', 'TwiggyExtensionTools::user'),
+			new Twig_SimpleFunction('profile', 'TwiggyExtensionTools::profile'),
 
-			new Twig_SimpleFunction('isMember', 'Twig_Extensions_Extension_Tools::isMember'),
-			new Twig_SimpleFunction('isAuthenticated', 'Twig_Extensions_Extension_Tools::isAuthenticated'),
-			new Twig_SimpleFunction('hasSessionContext', 'Twig_Extensions_Extension_Tools::hasSessionContext'),
-			new Twig_SimpleFunction('hasPermission', 'Twig_Extensions_Extension_Tools::hasPermission')
+			new Twig_SimpleFunction('isMember', 'TwiggyExtensionTools::isMember'),
+			new Twig_SimpleFunction('isAuthenticated', 'TwiggyExtensionTools::isAuthenticated'),
+			new Twig_SimpleFunction('hasSessionContext', 'TwiggyExtensionTools::hasSessionContext'),
+			new Twig_SimpleFunction('hasPermission', 'TwiggyExtensionTools::hasPermission')
 
 		);
 	}
