@@ -101,57 +101,6 @@ class Twiggy
 	}
 
 	/**
-	 * @return array
-	 */
-//	public function getDataBaseTemplates()
-//	{
-//		/* array cache $options */
-//		$options = array(
-//			'cache_key' => 'config/templates/database',
-//			'cacheTime' => 0,
-//		);
-//		if (!$templates = $this->getCache($options)) {
-//			$q = $this->modx->newQuery('modTemplate');
-//			$q->select('templatename,content');
-//			if ($q->prepare() AND $q->stmt->execute()) {
-//				$rows = $q->stmt->fetchAll(PDO::FETCH_ASSOC);
-//				foreach ($rows as $row) {
-//					$templates[$row['templatename']] = $row['content'];
-//				}
-//			}
-//			$this->setCache($templates, $options);
-//		}
-//
-//		return (array)$templates;
-//	}
-
-	/**
-	 * @return array
-	 */
-//	public function getFileTemplates()
-//	{
-//		/* array cache $options */
-//		$options = array(
-//			'cache_key' => 'config/templates/file',
-//			'cacheTime' => 0,
-//		);
-//		if (!$templates = $this->getCache($options)) {
-//			$paths = $this->explodeAndClean($this->getOption('path_templates', null, '', true));
-//			foreach ($paths as $path) {
-//				$files = scandir($path);
-//				foreach ($files as $file) {
-//					if (preg_match('/.*?\.tpl$/i', $file)) {
-//						$templates[str_replace('.tpl', '', $file)] = file_get_contents($path . '/' . $file);
-//					}
-//				}
-//			}
-//			$this->setCache($templates, $options);
-//		}
-//
-//		return (array)$templates;
-//	}
-
-	/**
 	 * @return twiggyParser
 	 */
 	public function getParser()
