@@ -4,19 +4,19 @@ $settings = array();
 
 $tmp = array(
 
-	'class'              => array(
+	'class'           => array(
 		'xtype' => 'textfield',
 		'value' => 'twiggy.Twiggy',
 		'area'  => 'twiggy_main',
 	),
-	'path_extensions'    => array(
+	'path_extensions' => array(
 		'xtype' => 'textfield',
 		//'value' => '{base_path}twiggy/core/components/twiggy/elements/extensions/',
 
 		'value' => '{core_path}components/twiggy/elements/extensions/',
 		'area'  => 'twiggy_main',
 	),
-	'path_templates'     => array(
+	'path_templates'  => array(
 		'xtype' => 'textarea',
 		//'value' => '{base_path}twiggy/core/components/twiggy/elements/templates/',
 
@@ -24,11 +24,23 @@ $tmp = array(
 		'area'  => 'twiggy_main',
 	),
 
-	'extensions'         => array(
+	'extensions' => array(
 		'xtype' => 'textarea',
 		'value' => 'Tools,Cache,Pcre', // DebugBar
 		'area'  => 'twiggy_main',
 	),
+
+	'path_loaders'  => array(
+		'xtype' => 'textarea',
+		'value' => '{core_path}components/twiggy/elements/loaders/',
+		'area'  => 'twiggy_main',
+	),
+	'loaders' => array(
+		'xtype' => 'textfield',
+		'value' => 'Template,Chunk',
+		'area'  => 'twiggy_main',
+	),
+
 
 
 	'sandbox'            => array(
@@ -63,17 +75,17 @@ $tmp = array(
 	),
 
 
-	'debug'              => array(
+	'debug'      => array(
 		'xtype' => 'combo-boolean',
 		'value' => false,
 		'area'  => 'twiggy_twig',
 	),
-	'autoescape'         => array(
+	'autoescape' => array(
 		'xtype' => 'textfield',
 		'value' => '',
 		'area'  => 'twiggy_twig',
 	),
-	'cache'              => array(
+	'cache'      => array(
 		'xtype' => 'textfield',
 		'value' => '{core_path}cache/default/twiggy/cache/',
 		'area'  => 'twiggy_twig',

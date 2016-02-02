@@ -23,7 +23,7 @@ class Twiggy
 		'data'     => array(),
 		'chunk'    => array(),
 		'snippet'  => array(),
-		'resource' => array(),
+		'resource' => array()
 	);
 
 	/**
@@ -103,53 +103,53 @@ class Twiggy
 	/**
 	 * @return array
 	 */
-	public function getDataBaseTemplates()
-	{
-		/* array cache $options */
-		$options = array(
-			'cache_key' => 'config/templates/database',
-			'cacheTime' => 0,
-		);
-		if (!$templates = $this->getCache($options)) {
-			$q = $this->modx->newQuery('modTemplate');
-			$q->select('templatename,content');
-			if ($q->prepare() AND $q->stmt->execute()) {
-				$rows = $q->stmt->fetchAll(PDO::FETCH_ASSOC);
-				foreach ($rows as $row) {
-					$templates[$row['templatename']] = $row['content'];
-				}
-			}
-			$this->setCache($templates, $options);
-		}
-
-		return (array)$templates;
-	}
+//	public function getDataBaseTemplates()
+//	{
+//		/* array cache $options */
+//		$options = array(
+//			'cache_key' => 'config/templates/database',
+//			'cacheTime' => 0,
+//		);
+//		if (!$templates = $this->getCache($options)) {
+//			$q = $this->modx->newQuery('modTemplate');
+//			$q->select('templatename,content');
+//			if ($q->prepare() AND $q->stmt->execute()) {
+//				$rows = $q->stmt->fetchAll(PDO::FETCH_ASSOC);
+//				foreach ($rows as $row) {
+//					$templates[$row['templatename']] = $row['content'];
+//				}
+//			}
+//			$this->setCache($templates, $options);
+//		}
+//
+//		return (array)$templates;
+//	}
 
 	/**
 	 * @return array
 	 */
-	public function getFileTemplates()
-	{
-		/* array cache $options */
-		$options = array(
-			'cache_key' => 'config/templates/file',
-			'cacheTime' => 0,
-		);
-		if (!$templates = $this->getCache($options)) {
-			$paths = $this->explodeAndClean($this->getOption('path_templates', null, '', true));
-			foreach ($paths as $path) {
-				$files = scandir($path);
-				foreach ($files as $file) {
-					if (preg_match('/.*?\.tpl$/i', $file)) {
-						$templates[str_replace('.tpl', '', $file)] = file_get_contents($path . '/' . $file);
-					}
-				}
-			}
-			$this->setCache($templates, $options);
-		}
-
-		return (array)$templates;
-	}
+//	public function getFileTemplates()
+//	{
+//		/* array cache $options */
+//		$options = array(
+//			'cache_key' => 'config/templates/file',
+//			'cacheTime' => 0,
+//		);
+//		if (!$templates = $this->getCache($options)) {
+//			$paths = $this->explodeAndClean($this->getOption('path_templates', null, '', true));
+//			foreach ($paths as $path) {
+//				$files = scandir($path);
+//				foreach ($files as $file) {
+//					if (preg_match('/.*?\.tpl$/i', $file)) {
+//						$templates[str_replace('.tpl', '', $file)] = file_get_contents($path . '/' . $file);
+//					}
+//				}
+//			}
+//			$this->setCache($templates, $options);
+//		}
+//
+//		return (array)$templates;
+//	}
 
 	/**
 	 * @return twiggyParser
@@ -177,14 +177,21 @@ class Twiggy
 
 				require_once dirname(dirname(dirname(__FILE__))) . '/vendor/Twig/vendor/autoload.php';
 
-				/* get $templates */
-				$templates = array_merge(
-					$this->getFileTemplates(),
-					$this->getDataBaseTemplates()
-				);
+				/** @var Twig_Loader_Chain $twigLoader */
+				$twigLoader = new Twig_Loader_Chain(array());
+
+				$loaders = $this->explodeAndClean($this->getOption('loaders', $this->config, '', true));
+				if (!empty($loaders)) {
+					$pathLoaders = trim($this->getOption('path_loaders', $this->config, '', true));
+					foreach ($loaders as $loader) {
+						if ($loaderClass = $this->modx->loadClass('TwiggyLoader' . $loader, $pathLoaders, false, true)) {
+							$twigLoader->addLoader(new $loaderClass($this));
+						}
+					}
+				}
 
 				/** @var Twig_Environment twig */
-				$this->twig = new Twig_Environment(new Twig_Loader_Array($templates), $this->config);
+				$this->twig = new Twig_Environment($twigLoader, $this->config);
 				$this->debug = (boolean)$this->getOption('debug', $this->config, false, true);
 				if ($this->debug) {
 					$this->twig->addExtension(new Twig_Extension_Debug());
@@ -248,7 +255,7 @@ class Twiggy
 
 		return $this->twig;
 	}
-	
+
 	/**
 	 * setGlobals
 	 */
