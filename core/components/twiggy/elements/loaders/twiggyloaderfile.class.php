@@ -1,6 +1,6 @@
 <?php
 
-class TwiggyLoaderChunk extends Twig_Loader_Array
+class TwiggyLoaderFile extends Twig_Loader_Filesystem
 {
 	/** @var MODx $modx */
 	private $modx;
@@ -14,59 +14,72 @@ class TwiggyLoaderChunk extends Twig_Loader_Array
 	{
 		$this->Twiggy = &$Twiggy;
 		$this->modx = &$Twiggy->modx;
+
+		$paths = $this->Twiggy->explodeAndClean($this->Twiggy->getOption('path_templates', null, '', true));
+		$this->setPaths($paths);
 	}
 
+	/**
+	 * @param $name
+	 *
+	 * @return mixed|null
+	 */
 	public function getName($name)
 	{
 		$name = trim($name);
-		if (strpos($name, 'chunk|') === false) {
+		if (strpos($name, 'file|') === false) {
 			return null;
 		}
 
-		return str_replace('chunk|', '', $name);
+		return str_replace('file|', '', $name);
 	}
 
-	public function exists($name)
-	{
-		$name = $this->getName($name);
-		$c = (is_numeric($name) AND $name > 0) ? $name : array('name' => $name);
-
-		return (bool)$this->modx->getCount('modChunk', $c);
-	}
-
+	/**
+	 * @param string $name
+	 *
+	 * @return bool|string
+	 */
 	public function getSource($name)
 	{
 		$name = $this->getName($name);
-		$content = '';
-		if ($pos = strpos($name, '@')) {
-			$propertySet = substr($name, $pos + 1);
-			$name = substr($name, 0, $pos);
-		}
-		$c = (is_numeric($name) AND $name > 0) ? $name : array('name' => $name);
-		/** @var modChunk $chunk */
-		if ($element = $this->modx->getObject('modChunk', $c)) {
-			$content = $element->getContent();
-			if (!empty($propertySet) AND $tmp = $element->getPropertySet($propertySet)) {
-				$properties = $tmp;
-			} else {
-				$properties = $element->getProperties();
-			}
-			if (!empty($content) AND !empty($properties)) {
-				$content = $this->Twiggy->parseChunk('@INLINE ' . $content, $properties);
-			}
-		}
 
-		return $content;
+		return parent::getSource($name);
 	}
 
+	/**
+	 * @param string $name
+	 *
+	 * @return false|string
+	 */
 	public function getCacheKey($name)
 	{
-		return $name;
+		$name = $this->getName($name);
+
+		return parent::getCacheKey($name);
 	}
 
+	/**
+	 * @param string $name
+	 *
+	 * @return bool
+	 */
+	public function exists($name)
+	{
+		$name = $this->getName($name);
+
+		return parent::exists($name);
+	}
+
+	/**
+	 * @param string $name
+	 * @param int    $time
+	 *
+	 * @return bool
+	 */
 	public function isFresh($name, $time)
 	{
-		return !(boolean)$this->Twiggy->getOption('debug', '', false, true);
-	}
+		$name = $this->getName($name);
 
+		return parent::isFresh($name, $time);
+	}
 }

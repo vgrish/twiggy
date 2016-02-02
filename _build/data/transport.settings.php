@@ -18,8 +18,6 @@ $tmp = array(
 	),
 	'path_templates'  => array(
 		'xtype' => 'textarea',
-		//'value' => '{base_path}twiggy/core/components/twiggy/elements/templates/',
-
 		'value' => '{core_path}components/twiggy/elements/templates/',
 		'area'  => 'twiggy_main',
 	),

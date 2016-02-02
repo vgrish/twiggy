@@ -16,6 +16,11 @@ class TwiggyLoaderChunk extends Twig_Loader_Array
 		$this->modx = &$Twiggy->modx;
 	}
 
+	/**
+	 * @param $name
+	 *
+	 * @return mixed|null
+	 */
 	public function getName($name)
 	{
 		$name = trim($name);
@@ -26,6 +31,11 @@ class TwiggyLoaderChunk extends Twig_Loader_Array
 		return str_replace('chunk|', '', $name);
 	}
 
+	/**
+	 * @param string $name
+	 *
+	 * @return bool
+	 */
 	public function exists($name)
 	{
 		$name = $this->getName($name);
@@ -34,6 +44,11 @@ class TwiggyLoaderChunk extends Twig_Loader_Array
 		return (bool)$this->modx->getCount('modChunk', $c);
 	}
 
+	/**
+	 * @param string $name
+	 *
+	 * @return mixed|string
+	 */
 	public function getSource($name)
 	{
 		$name = $this->getName($name);
@@ -59,11 +74,22 @@ class TwiggyLoaderChunk extends Twig_Loader_Array
 		return $content;
 	}
 
+	/**
+	 * @param string $name
+	 *
+	 * @return string
+	 */
 	public function getCacheKey($name)
 	{
 		return $name;
 	}
 
+	/**
+	 * @param string $name
+	 * @param int    $time
+	 *
+	 * @return bool
+	 */
 	public function isFresh($name, $time)
 	{
 		return !(boolean)$this->Twiggy->getOption('debug', '', false, true);
