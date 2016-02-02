@@ -49,7 +49,7 @@ $_lang['setting_twiggy_sandbox_methods_desc'] = 'Строка, закодиро�
 $_lang['setting_twiggy_sandbox_properties'] = 'Разрешенные свойства';
 $_lang['setting_twiggy_sandbox_properties_desc'] = 'Строка, закодированная в JSON, с разрешенными свойствами для подключения в режиме песочницы.';
 
-$_lang['setting_twiggy_loaders'] = 'Загрузки Twiggy';
+$_lang['setting_twiggy_loaders'] = 'Загрузчики Twiggy';
 $_lang['setting_twiggy_loaders_desc'] = 'Список активных загрузчиков через запятую, для подключения в Twiggy.';
 
 $_lang['setting_twiggy_path_loaders'] = 'Путь до загрузчиков Twiggy';
