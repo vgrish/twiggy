@@ -28,17 +28,16 @@ $tmp = array(
 		'area'  => 'twiggy_main',
 	),
 
-	'path_loaders'  => array(
+	'path_loaders' => array(
 		'xtype' => 'textarea',
 		'value' => '{core_path}components/twiggy/elements/loaders/',
 		'area'  => 'twiggy_main',
 	),
-	'loaders' => array(
+	'loaders'      => array(
 		'xtype' => 'textfield',
 		'value' => 'Template,Chunk',
 		'area'  => 'twiggy_main',
 	),
-
 
 
 	'sandbox'            => array(

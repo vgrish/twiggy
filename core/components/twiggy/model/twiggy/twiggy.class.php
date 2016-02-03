@@ -228,7 +228,7 @@ class Twiggy
 	 *
 	 * @return string
 	 */
-	public function process($content, array $pls = array())
+	public function process($content, array $pls = array(), $fastMode = false)
 	{
 		$content = is_array($content) ? trim($content['content']) : trim($content);
 		if (!preg_match('#\{.*\}#', $content)) {
@@ -238,8 +238,13 @@ class Twiggy
 			return $content;
 		}
 		try {
-			$template = $twig->createTemplate($content);
-			$content = $template->render(array('pls' => $pls));
+			if ($fastMode) {
+				$twig->setLoader(new \Twig_Loader_Array(['tpl' => $content]));
+				$content = $twig->render('tpl', array('pls' => $pls));
+			} else {
+				$template = $twig->createTemplate($content);
+				$content = $template->render(array('pls' => $pls));
+			}
 		} catch (Exception $e) {
 			$this->modx->log(modX::LOG_LEVEL_ERROR, $e->getMessage());
 		}

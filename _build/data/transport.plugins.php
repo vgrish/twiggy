@@ -9,7 +9,7 @@ $tmp = array(
 		'events'      => array(
 			'OnSiteRefresh'    => array(),
 			'OnTemplateSave'   => array(),
-			'OnTemplateRemove' => array(),
+			'OnTemplateRemove' => array()
 		)
 	)
 

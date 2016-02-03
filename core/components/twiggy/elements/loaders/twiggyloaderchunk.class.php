@@ -92,7 +92,7 @@ class TwiggyLoaderChunk extends Twig_Loader_Array
 	 */
 	public function isFresh($name, $time)
 	{
-		return !(boolean)$this->Twiggy->getOption('debug', '', false, true);
+		return !(boolean)$this->Twiggy->getOption('debug', $this->Twiggy->config, false, true);
 	}
 
 }
