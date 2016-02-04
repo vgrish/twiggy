@@ -18,6 +18,7 @@ $sources = array(
 	'data'          => $root . '_build/data/',
 	'validators'    => $root . '_build/validators/',
 	'resolvers'     => $root . '_build/resolvers/',
+	'snippets'      => $root . 'core/components/' . PKG_NAME_LOWER . '/elements/snippets/',
 	'plugins'       => $root . 'core/components/' . PKG_NAME_LOWER . '/elements/plugins/',
 	'lexicon'       => $root . 'core/components/' . PKG_NAME_LOWER . '/lexicon/',
 	'docs'          => $root . 'core/components/' . PKG_NAME_LOWER . '/docs/',
@@ -100,6 +101,21 @@ $attr = array(
 	xPDOTransport::ABORT_INSTALL_ON_VEHICLE_FAIL => true,
 );
 
+/* add snippets */
+if (defined('BUILD_SNIPPET_UPDATE')) {
+	$attr[xPDOTransport::RELATED_OBJECT_ATTRIBUTES]['Snippets'] = array(
+		xPDOTransport::PRESERVE_KEYS => false,
+		xPDOTransport::UPDATE_OBJECT => BUILD_SNIPPET_UPDATE,
+		xPDOTransport::UNIQUE_KEY    => 'name',
+	);
+	$snippets = include $sources['data'] . 'transport.snippets.php';
+	if (!is_array($snippets)) {
+		$modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in snippets.');
+	} else {
+		$category->addMany($snippets);
+		$modx->log(modX::LOG_LEVEL_INFO, 'Packaged in ' . count($snippets) . ' snippets.');
+	}
+}
 
 /* add plugins */
 if (defined('BUILD_PLUGIN_UPDATE')) {

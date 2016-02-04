@@ -4,7 +4,7 @@ $snippets = array();
 
 $tmp = array(
 	'twiggy' => array(
-		'file' => 'twiggy',
+		'file'        => 'twiggy',
 		'description' => '',
 	),
 );
@@ -13,12 +13,12 @@ foreach ($tmp as $k => $v) {
 	/* @avr modSnippet $snippet */
 	$snippet = $modx->newObject('modSnippet');
 	$snippet->fromArray(array(
-		'id' => 0,
-		'name' => $k,
+		'id'          => 0,
+		'name'        => $k,
 		'description' => @$v['description'],
-		'snippet' => getSnippetContent($sources['source_core'] . '/elements/snippets/snippet.' . $v['file'] . '.php'),
-		'static' => BUILD_SNIPPET_STATIC,
-		'source' => 1,
+		'snippet'     => getSnippetContent($sources['source_core'] . '/elements/snippets/snippet.' . $v['file'] . '.php'),
+		'static'      => BUILD_SNIPPET_STATIC,
+		'source'      => 1,
 		'static_file' => 'core/components/' . PKG_NAME_LOWER . '/elements/snippets/snippet.' . $v['file'] . '.php',
 	), '', true, true);
 
