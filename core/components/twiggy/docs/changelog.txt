@@ -1,5 +1,9 @@
 Changelog for Twiggy.
 
+1.1.4-beta (05.02.2016)
+==============
+- Add compatibility pdoTools
+
 1.1.3-beta (04.02.2016)
 ==============
 - Remove DebugBar
