@@ -2,9 +2,9 @@
 
 class twiggyOnTemplateSave extends twiggyPlugin
 {
-	public function run()
-	{
-		$this->Twiggy->clearTwiggyCache();
-	}
+    public function run()
+    {
+        $this->Twiggy->clearTwiggyCache();
+    }
 
 }

@@ -1,4 +1,5 @@
 <?php
+
 if (!class_exists('modParser')) {
     require_once MODX_CORE_PATH . 'model/modx/modparser.class.php';
 }
