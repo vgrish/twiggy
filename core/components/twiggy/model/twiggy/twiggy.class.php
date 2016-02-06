@@ -246,7 +246,7 @@ class Twiggy
         $content = '';
 
         switch (true) {
-            case strpos($name, '@INLINE ') !== false:
+            case strpos($name, '@INLINE') !== false:
                 $cacheName = crc32($name);
                 $binding = 'INLINE';
                 break;
@@ -645,6 +645,7 @@ class Twiggy
         if (!empty($name)) {
             $chunk = $this->loadChunk($name, $properties);
         }
+
         if (empty($name) OR empty($chunk['content'])) {
             return !empty($properties)
                 ? str_replace(array('[', ']', '`'), array('&#91;', '&#93;', '&#96;'),
