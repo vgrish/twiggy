@@ -36,7 +36,6 @@ class Twig_Node_Sandbox extends Twig_Node
             ->indent()
             ->write("\$sandbox->disableSandbox();\n")
             ->outdent()
-            ->write("}\n")
-        ;
+            ->write("}\n");
     }
 }

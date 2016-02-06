@@ -52,7 +52,7 @@ class Twig_NodeVisitor_SafeAnalysis extends Twig_BaseNodeVisitor
             }
         }
         $this->data[$hash][] = array(
-            'key' => $node,
+            'key'   => $node,
             'value' => $safe,
         );
     }
@@ -81,7 +81,8 @@ class Twig_NodeVisitor_SafeAnalysis extends Twig_BaseNodeVisitor
             $this->setSafe($node, array('all'));
         } elseif ($node instanceof Twig_Node_Expression_Conditional) {
             // intersect safeness of both operands
-            $safe = $this->intersectSafe($this->getSafe($node->getNode('expr2')), $this->getSafe($node->getNode('expr3')));
+            $safe = $this->intersectSafe($this->getSafe($node->getNode('expr2')),
+                $this->getSafe($node->getNode('expr3')));
             $this->setSafe($node, $safe);
         } elseif ($node instanceof Twig_Node_Expression_Filter) {
             // filter expression is safe when the filter is safe

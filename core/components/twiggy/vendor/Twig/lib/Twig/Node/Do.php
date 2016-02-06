@@ -27,7 +27,6 @@ class Twig_Node_Do extends Twig_Node
             ->addDebugInfo($this)
             ->write('')
             ->subcompile($this->getNode('expr'))
-            ->raw(";\n")
-        ;
+            ->raw(";\n");
     }
 }

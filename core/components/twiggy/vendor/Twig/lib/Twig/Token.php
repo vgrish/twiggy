@@ -38,8 +38,8 @@ class Twig_Token
     /**
      * Constructor.
      *
-     * @param int    $type   The type of the token
-     * @param string $value  The token value
+     * @param int    $type The type of the token
+     * @param string $value The token value
      * @param int    $lineno The line position in the source
      */
     public function __construct($type, $value, $lineno)
@@ -67,7 +67,7 @@ class Twig_Token
      * * type and value (or array of possible values)
      * * just value (or array of possible values) (NAME_TYPE is used as type)
      *
-     * @param array|int         $type   The type to test
+     * @param array|int         $type The type to test
      * @param array|string|null $values The token value
      *
      * @return bool
@@ -119,7 +119,7 @@ class Twig_Token
     /**
      * Returns the constant representation (internal) of a given type.
      *
-     * @param int  $type  The type as an integer
+     * @param int  $type The type as an integer
      * @param bool $short Whether to return a short representation or not
      *
      * @return string The string representation
@@ -170,7 +170,7 @@ class Twig_Token
                 throw new LogicException(sprintf('Token of type "%s" does not exist.', $type));
         }
 
-        return $short ? $name : 'Twig_Token::'.$name;
+        return $short ? $name : 'Twig_Token::' . $name;
     }
 
     /**

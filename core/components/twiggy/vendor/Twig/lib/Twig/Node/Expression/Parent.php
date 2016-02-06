@@ -29,14 +29,12 @@ class Twig_Node_Expression_Parent extends Twig_Node_Expression
                 ->addDebugInfo($this)
                 ->write('$this->displayParentBlock(')
                 ->string($this->getAttribute('name'))
-                ->raw(", \$context, \$blocks);\n")
-            ;
+                ->raw(", \$context, \$blocks);\n");
         } else {
             $compiler
                 ->raw('$this->renderParentBlock(')
                 ->string($this->getAttribute('name'))
-                ->raw(', $context, $blocks)')
-            ;
+                ->raw(', $context, $blocks)');
         }
     }
 }

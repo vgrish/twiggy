@@ -50,6 +50,7 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
             'key'       => 'pdoFetch.class',
         ), '', true, true);
         $tmp->save();
+
         if (!$tmp = $modx->getObject('modSystemSetting', array('key' => 'pdoTools.class'))) {
             $tmp = $modx->newObject('modSystemSetting');
         }
@@ -62,6 +63,19 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
         ), '', true, true);
         $tmp->save();
 
+        if (!$tmp = $modx->getObject('modSystemSetting', array('key' => 'pdotools_fenom_default'))) {
+            $tmp = $modx->newObject('modSystemSetting');
+        }
+        $tmp->fromArray(array(
+            'namespace' => 'pdotools',
+            'area'      => 'pdotools_main',
+            'xtype'     => 'combo-boolean',
+            'value'     => false,
+            'key'       => 'pdotools_fenom_default',
+        ), '', true, true);
+        $tmp->save();
+
+
         break;
     case xPDOTransport::ACTION_UNINSTALL:
         $modx->removeCollection('modSystemSetting', array('area' => 'twiggy_main'));
@@ -72,10 +86,17 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
             $tmp->set('value', 'pdotools.pdofetch');
             $tmp->save();
         }
+
         if ($tmp = $modx->getObject('modSystemSetting', array('key' => 'pdoTools.class'))) {
             $tmp->set('value', 'pdotools.pdotools');
             $tmp->save();
         }
+
+        if ($tmp = $modx->getObject('modSystemSetting', array('key' => 'pdotools_fenom_default'))) {
+            $tmp->set('value', true);
+            $tmp->save();
+        }
+
 
         break;
 }

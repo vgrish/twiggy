@@ -19,15 +19,29 @@ class Twig_Node_For extends Twig_Node
 {
     private $loop;
 
-    public function __construct(Twig_Node_Expression_AssignName $keyTarget, Twig_Node_Expression_AssignName $valueTarget, Twig_Node_Expression $seq, Twig_Node_Expression $ifexpr = null, Twig_Node $body, Twig_Node $else = null, $lineno, $tag = null)
-    {
+    public function __construct(
+        Twig_Node_Expression_AssignName $keyTarget,
+        Twig_Node_Expression_AssignName $valueTarget,
+        Twig_Node_Expression $seq,
+        Twig_Node_Expression $ifexpr = null,
+        Twig_Node $body,
+        Twig_Node $else = null,
+        $lineno,
+        $tag = null
+    ) {
         $body = new Twig_Node(array($body, $this->loop = new Twig_Node_ForLoop($lineno, $tag)));
 
         if (null !== $ifexpr) {
             $body = new Twig_Node_If(new Twig_Node(array($ifexpr, $body)), null, $lineno, $tag);
         }
 
-        parent::__construct(array('key_target' => $keyTarget, 'value_target' => $valueTarget, 'seq' => $seq, 'body' => $body, 'else' => $else), array('with_loop' => true, 'ifexpr' => null !== $ifexpr), $lineno, $tag);
+        parent::__construct(array(
+            'key_target'   => $keyTarget,
+            'value_target' => $valueTarget,
+            'seq'          => $seq,
+            'body'         => $body,
+            'else'         => $else
+        ), array('with_loop' => true, 'ifexpr' => null !== $ifexpr), $lineno, $tag);
     }
 
     public function compile(Twig_Compiler $compiler)
@@ -37,8 +51,7 @@ class Twig_Node_For extends Twig_Node
             ->write("\$context['_parent'] = \$context;\n")
             ->write("\$context['_seq'] = twig_ensure_traversable(")
             ->subcompile($this->getNode('seq'))
-            ->raw(");\n")
-        ;
+            ->raw(");\n");
 
         if (null !== $this->getNode('else')) {
             $compiler->write("\$context['_iterated'] = false;\n");
@@ -51,8 +64,7 @@ class Twig_Node_For extends Twig_Node
                 ->write("  'index0' => 0,\n")
                 ->write("  'index'  => 1,\n")
                 ->write("  'first'  => true,\n")
-                ->write(");\n")
-            ;
+                ->write(");\n");
 
             if (!$this->getAttribute('ifexpr')) {
                 $compiler
@@ -64,8 +76,7 @@ class Twig_Node_For extends Twig_Node
                     ->write("\$context['loop']['length'] = \$length;\n")
                     ->write("\$context['loop']['last'] = 1 === \$length;\n")
                     ->outdent()
-                    ->write("}\n")
-                ;
+                    ->write("}\n");
             }
         }
 
@@ -82,8 +93,7 @@ class Twig_Node_For extends Twig_Node
             ->indent()
             ->subcompile($this->getNode('body'))
             ->outdent()
-            ->write("}\n")
-        ;
+            ->write("}\n");
 
         if (null !== $this->getNode('else')) {
             $compiler
@@ -91,14 +101,13 @@ class Twig_Node_For extends Twig_Node
                 ->indent()
                 ->subcompile($this->getNode('else'))
                 ->outdent()
-                ->write("}\n")
-            ;
+                ->write("}\n");
         }
 
         $compiler->write("\$_parent = \$context['_parent'];\n");
 
         // remove some "private" loop variables (needed for nested loops)
-        $compiler->write('unset($context[\'_seq\'], $context[\'_iterated\'], $context[\''.$this->getNode('key_target')->getAttribute('name').'\'], $context[\''.$this->getNode('value_target')->getAttribute('name').'\'], $context[\'_parent\'], $context[\'loop\']);'."\n");
+        $compiler->write('unset($context[\'_seq\'], $context[\'_iterated\'], $context[\'' . $this->getNode('key_target')->getAttribute('name') . '\'], $context[\'' . $this->getNode('value_target')->getAttribute('name') . '\'], $context[\'_parent\'], $context[\'loop\']);' . "\n");
 
         // keep the values set in the inner context for variables defined in the outer context
         $compiler->write("\$context = array_intersect_key(\$context, \$_parent) + \$_parent;\n");

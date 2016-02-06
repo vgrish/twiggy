@@ -19,7 +19,7 @@ any other ones:
     {{ foo }}
 
 The assigned value can be any valid :ref:`Twig expressions
-<twig-expressions>`:
+        <twig-expressions>`:
 
 .. code-block:: jinja
 

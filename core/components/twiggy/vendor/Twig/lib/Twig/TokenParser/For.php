@@ -50,11 +50,13 @@ class Twig_TokenParser_For extends Twig_TokenParser
             $keyTarget = $targets->getNode(0);
             $keyTarget = new Twig_Node_Expression_AssignName($keyTarget->getAttribute('name'), $keyTarget->getLine());
             $valueTarget = $targets->getNode(1);
-            $valueTarget = new Twig_Node_Expression_AssignName($valueTarget->getAttribute('name'), $valueTarget->getLine());
+            $valueTarget = new Twig_Node_Expression_AssignName($valueTarget->getAttribute('name'),
+                $valueTarget->getLine());
         } else {
             $keyTarget = new Twig_Node_Expression_AssignName('_key', $lineno);
             $valueTarget = $targets->getNode(0);
-            $valueTarget = new Twig_Node_Expression_AssignName($valueTarget->getAttribute('name'), $valueTarget->getLine());
+            $valueTarget = new Twig_Node_Expression_AssignName($valueTarget->getAttribute('name'),
+                $valueTarget->getLine());
         }
 
         if ($ifexpr) {
@@ -79,7 +81,8 @@ class Twig_TokenParser_For extends Twig_TokenParser
     private function checkLoopUsageCondition(Twig_TokenStream $stream, Twig_Node $node)
     {
         if ($node instanceof Twig_Node_Expression_GetAttr && $node->getNode('node') instanceof Twig_Node_Expression_Name && 'loop' == $node->getNode('node')->getAttribute('name')) {
-            throw new Twig_Error_Syntax('The "loop" variable cannot be used in a looping condition', $node->getLine(), $stream->getFilename());
+            throw new Twig_Error_Syntax('The "loop" variable cannot be used in a looping condition', $node->getLine(),
+                $stream->getFilename());
         }
 
         foreach ($node as $n) {
@@ -97,8 +100,11 @@ class Twig_TokenParser_For extends Twig_TokenParser
     {
         if ($node instanceof Twig_Node_Expression_GetAttr && $node->getNode('node') instanceof Twig_Node_Expression_Name && 'loop' == $node->getNode('node')->getAttribute('name')) {
             $attribute = $node->getNode('attribute');
-            if ($attribute instanceof Twig_Node_Expression_Constant && in_array($attribute->getAttribute('value'), array('length', 'revindex0', 'revindex', 'last'))) {
-                throw new Twig_Error_Syntax(sprintf('The "loop.%s" variable is not defined when looping with a condition', $attribute->getAttribute('value')), $node->getLine(), $stream->getFilename());
+            if ($attribute instanceof Twig_Node_Expression_Constant && in_array($attribute->getAttribute('value'),
+                    array('length', 'revindex0', 'revindex', 'last'))
+            ) {
+                throw new Twig_Error_Syntax(sprintf('The "loop.%s" variable is not defined when looping with a condition',
+                    $attribute->getAttribute('value')), $node->getLine(), $stream->getFilename());
             }
         }
 

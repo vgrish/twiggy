@@ -75,13 +75,14 @@ class Twig_Environment
      *                  * false: disable auto-escaping
      *                  * html, js: set the autoescaping to one of the supported strategies
      *                  * filename: set the autoescaping strategy based on the template filename extension
-     *                  * PHP callback: a PHP callback that returns an escaping strategy based on the template "filename"
+     *                  * PHP callback: a PHP callback that returns an escaping strategy based on the template
+     * "filename"
      *
      *  * optimizations: A flag that indicates which optimizations to apply
      *                   (default to -1 which means that all optimizations are enabled;
      *                   set it to 0 to disable).
      *
-     * @param Twig_LoaderInterface $loader  A Twig_LoaderInterface instance
+     * @param Twig_LoaderInterface $loader A Twig_LoaderInterface instance
      * @param array                $options An array of options
      */
     public function __construct(Twig_LoaderInterface $loader, $options = array())
@@ -89,21 +90,21 @@ class Twig_Environment
         $this->setLoader($loader);
 
         $options = array_merge(array(
-            'debug' => false,
-            'charset' => 'UTF-8',
+            'debug'               => false,
+            'charset'             => 'UTF-8',
             'base_template_class' => 'Twig_Template',
-            'strict_variables' => false,
-            'autoescape' => 'html',
-            'cache' => false,
-            'auto_reload' => null,
-            'optimizations' => -1,
+            'strict_variables'    => false,
+            'autoescape'          => 'html',
+            'cache'               => false,
+            'auto_reload'         => null,
+            'optimizations'       => -1,
         ), $options);
 
-        $this->debug = (bool) $options['debug'];
+        $this->debug = (bool)$options['debug'];
         $this->setCharset($options['charset']);
         $this->baseTemplateClass = $options['base_template_class'];
-        $this->autoReload = null === $options['auto_reload'] ? $this->debug : (bool) $options['auto_reload'];
-        $this->strictVariables = (bool) $options['strict_variables'];
+        $this->autoReload = null === $options['auto_reload'] ? $this->debug : (bool)$options['auto_reload'];
+        $this->strictVariables = (bool)$options['strict_variables'];
         $this->setCache($options['cache']);
 
         $this->addExtension(new Twig_Extension_Core());
@@ -255,7 +256,7 @@ class Twig_Environment
      *  * The currently enabled extensions;
      *  * Whether the Twig C extension is available or not.
      *
-     * @param string   $name  The name for which to calculate the template class name
+     * @param string   $name The name for which to calculate the template class name
      * @param int|null $index The index if it is an embedded template
      *
      * @return string The template class name
@@ -266,13 +267,13 @@ class Twig_Environment
         $key .= json_encode(array_keys($this->extensions));
         $key .= function_exists('twig_template_get_attributes');
 
-        return $this->templateClassPrefix.hash('sha256', $key).(null === $index ? '' : '_'.$index);
+        return $this->templateClassPrefix . hash('sha256', $key) . (null === $index ? '' : '_' . $index);
     }
 
     /**
      * Renders a template.
      *
-     * @param string $name    The template name
+     * @param string $name The template name
      * @param array  $context An array of parameters to pass to the template
      *
      * @return string The rendered template
@@ -289,7 +290,7 @@ class Twig_Environment
     /**
      * Displays a template.
      *
-     * @param string $name    The template name
+     * @param string $name The template name
      * @param array  $context An array of parameters to pass to the template
      *
      * @throws Twig_Error_Loader  When the template cannot be found
@@ -304,7 +305,7 @@ class Twig_Environment
     /**
      * Loads a template by name.
      *
-     * @param string $name  The template name
+     * @param string $name The template name
      * @param int    $index The index if it is an embedded template
      *
      * @return Twig_Template A template instance representing the given template name
@@ -331,7 +332,7 @@ class Twig_Environment
                 $content = $this->compileSource($this->getLoader()->getSource($name), $name);
                 $this->cache->write($key, $content);
 
-                eval('?>'.$content);
+                eval('?>' . $content);
             }
         }
 
@@ -362,14 +363,14 @@ class Twig_Environment
             $current = $this->getLoader(),
         ));
 
-		$this->setLoader($loader);
-		try {
-			$template = $this->loadTemplate($name);
-		} catch (Exception $e) {
-			$this->setLoader($current);
-			throw $e;
-		}
-		$this->setLoader($current);
+        $this->setLoader($loader);
+        try {
+            $template = $this->loadTemplate($name);
+        } catch (Exception $e) {
+            $this->setLoader($current);
+            throw $e;
+        }
+        $this->setLoader($current);
 
         return $template;
     }
@@ -434,7 +435,8 @@ class Twig_Environment
             throw $e;
         }
 
-        throw new Twig_Error_Loader(sprintf('Unable to find one of the following templates: "%s".', implode('", "', $names)));
+        throw new Twig_Error_Loader(sprintf('Unable to find one of the following templates: "%s".',
+            implode('", "', $names)));
     }
 
     /**
@@ -465,7 +467,7 @@ class Twig_Environment
      * Tokenizes a source code.
      *
      * @param string $source The template source code
-     * @param string $name   The template name
+     * @param string $name The template name
      *
      * @return Twig_TokenStream A Twig_TokenStream instance
      *
@@ -554,7 +556,7 @@ class Twig_Environment
      * Compiles a template source code.
      *
      * @param string $source The template source code
-     * @param string $name   The template name
+     * @param string $name The template name
      *
      * @return string The compiled PHP source code
      *
@@ -566,7 +568,8 @@ class Twig_Environment
             $compiled = $this->compile($this->parse($this->tokenize($source, $name)), $source);
 
             if (isset($source[0])) {
-                $compiled .= '/* '.str_replace(array('*/', "\r\n", "\r", "\n"), array('*//* ', "\n", "\n", "*/\n/* "), $source)."*/\n";
+                $compiled .= '/* ' . str_replace(array('*/', "\r\n", "\r", "\n"), array('*//* ', "\n", "\n", "*/\n/* "),
+                        $source) . "*/\n";
             }
 
             return $compiled;
@@ -574,7 +577,8 @@ class Twig_Environment
             $e->setTemplateFile($name);
             throw $e;
         } catch (Exception $e) {
-            throw new Twig_Error_Syntax(sprintf('An exception has been thrown during the compilation of a template ("%s").', $e->getMessage()), -1, $name, $e);
+            throw new Twig_Error_Syntax(sprintf('An exception has been thrown during the compilation of a template ("%s").',
+                $e->getMessage()), -1, $name, $e);
         }
     }
 
@@ -675,7 +679,8 @@ class Twig_Environment
         $name = $extension->getName();
 
         if ($this->extensionInitialized) {
-            throw new LogicException(sprintf('Unable to register extension "%s" as extensions have already been initialized.', $name));
+            throw new LogicException(sprintf('Unable to register extension "%s" as extensions have already been initialized.',
+                $name));
         }
 
         if (isset($this->extensions[$name])) {
@@ -788,7 +793,8 @@ class Twig_Environment
     public function addFilter(Twig_Filter $filter)
     {
         if ($this->extensionInitialized) {
-            throw new LogicException(sprintf('Unable to add filter "%s" as extensions have already been initialized.', $filter->getName()));
+            throw new LogicException(sprintf('Unable to add filter "%s" as extensions have already been initialized.',
+                $filter->getName()));
         }
 
         $this->staging->addFilter($filter);
@@ -818,7 +824,7 @@ class Twig_Environment
             $pattern = str_replace('\\*', '(.*?)', preg_quote($pattern, '#'), $count);
 
             if ($count) {
-                if (preg_match('#^'.$pattern.'$#', $name, $matches)) {
+                if (preg_match('#^' . $pattern . '$#', $name, $matches)) {
                     array_shift($matches);
                     $filter->setArguments($matches);
 
@@ -867,7 +873,8 @@ class Twig_Environment
     public function addTest(Twig_Test $test)
     {
         if ($this->extensionInitialized) {
-            throw new LogicException(sprintf('Unable to add test "%s" as extensions have already been initialized.', $test->getName()));
+            throw new LogicException(sprintf('Unable to add test "%s" as extensions have already been initialized.',
+                $test->getName()));
         }
 
         $this->staging->addTest($test);
@@ -915,7 +922,8 @@ class Twig_Environment
     public function addFunction(Twig_Function $function)
     {
         if ($this->extensionInitialized) {
-            throw new LogicException(sprintf('Unable to add function "%s" as extensions have already been initialized.', $function->getName()));
+            throw new LogicException(sprintf('Unable to add function "%s" as extensions have already been initialized.',
+                $function->getName()));
         }
 
         $this->staging->addFunction($function);
@@ -945,7 +953,7 @@ class Twig_Environment
             $pattern = str_replace('\\*', '(.*?)', preg_quote($pattern, '#'), $count);
 
             if ($count) {
-                if (preg_match('#^'.$pattern.'$#', $name, $matches)) {
+                if (preg_match('#^' . $pattern . '$#', $name, $matches)) {
                     array_shift($matches);
                     $function->setArguments($matches);
 
@@ -992,7 +1000,7 @@ class Twig_Environment
      * New globals can be added before compiling or rendering a template;
      * but after, you can only update existing globals.
      *
-     * @param string $name  The global name
+     * @param string $name The global name
      * @param mixed  $value The global value
      */
     public function addGlobal($name, $value)
@@ -1003,7 +1011,8 @@ class Twig_Environment
             }
 
             if (!array_key_exists($name, $this->globals)) {
-                throw new LogicException(sprintf('Unable to add global "%s" as the runtime or the extensions have already been initialized.', $name));
+                throw new LogicException(sprintf('Unable to add global "%s" as the runtime or the extensions have already been initialized.',
+                    $name));
             }
 
             // update the value
@@ -1085,7 +1094,8 @@ class Twig_Environment
         foreach ($this->extensions as $extension) {
             $extGlob = $extension->getGlobals();
             if (!is_array($extGlob)) {
-                throw new UnexpectedValueException(sprintf('"%s::getGlobals()" must return an array of globals.', get_class($extension)));
+                throw new UnexpectedValueException(sprintf('"%s::getGlobals()" must return an array of globals.',
+                    get_class($extension)));
             }
 
             $globals[] = $extGlob;
@@ -1151,7 +1161,8 @@ class Twig_Environment
         // operators
         if ($operators = $extension->getOperators()) {
             if (2 !== count($operators)) {
-                throw new InvalidArgumentException(sprintf('"%s::getOperators()" does not return a valid operators array.', get_class($extension)));
+                throw new InvalidArgumentException(sprintf('"%s::getOperators()" does not return a valid operators array.',
+                    get_class($extension)));
             }
 
             $this->unaryOperators = array_merge($this->unaryOperators, $operators[0]);

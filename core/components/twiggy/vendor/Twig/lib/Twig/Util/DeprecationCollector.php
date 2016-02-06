@@ -34,7 +34,7 @@ class Twig_Util_DeprecationCollector
         $iterator = new RegexIterator(
             new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($dir), RecursiveIteratorIterator::LEAVES_ONLY
-            ), '{'.preg_quote($ext).'$}'
+            ), '{' . preg_quote($ext) . '$}'
         );
 
         return $this->collect(new Twig_Util_TemplateDirIterator($iterator));
@@ -43,14 +43,15 @@ class Twig_Util_DeprecationCollector
     /**
      * Returns deprecations for passed templates.
      *
-     * @param Iterator $iterator An iterator of templates (where keys are template names and values the contents of the template)
+     * @param Iterator $iterator An iterator of templates (where keys are template names and values the contents of the
+     *     template)
      *
      * @return array() An array of deprecations
      */
     public function collect(Iterator $iterator)
     {
         $deprecations = array();
-        set_error_handler(function($type, $msg) use (&$deprecations) {
+        set_error_handler(function ($type, $msg) use (&$deprecations) {
             if (E_USER_DEPRECATED === $type) {
                 $deprecations[] = $msg;
             }

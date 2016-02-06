@@ -26,7 +26,6 @@ class Twig_Node_BlockReference extends Twig_Node implements Twig_NodeOutputInter
     {
         $compiler
             ->addDebugInfo($this)
-            ->write(sprintf("\$this->displayBlock('%s', \$context, \$blocks);\n", $this->getAttribute('name')))
-        ;
+            ->write(sprintf("\$this->displayBlock('%s', \$context, \$blocks);\n", $this->getAttribute('name')));
     }
 }

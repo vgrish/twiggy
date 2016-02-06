@@ -26,9 +26,10 @@ class Twig_Function
     /**
      * Creates a template function.
      *
-     * @param string        $name     Name of this function
-     * @param callable|null $callable A callable implementing the function. If null, you need to overwrite the "node_class" option to customize compilation.
-     * @param array         $options  Options array
+     * @param string        $name Name of this function
+     * @param callable|null $callable A callable implementing the function. If null, you need to overwrite the
+     *     "node_class" option to customize compilation.
+     * @param array         $options Options array
      */
     public function __construct($name, callable $callable = null, array $options = array())
     {
@@ -36,13 +37,13 @@ class Twig_Function
         $this->callable = $callable;
         $this->options = array_merge(array(
             'needs_environment' => false,
-            'needs_context' => false,
-            'is_variadic' => false,
-            'is_safe' => null,
-            'is_safe_callback' => null,
-            'node_class' => 'Twig_Node_Expression_Function',
-            'deprecated' => false,
-            'alternative' => null,
+            'needs_context'     => false,
+            'is_variadic'       => false,
+            'is_safe'           => null,
+            'is_safe_callback'  => null,
+            'node_class'        => 'Twig_Node_Expression_Function',
+            'deprecated'        => false,
+            'alternative'       => null,
         ), $options);
     }
 

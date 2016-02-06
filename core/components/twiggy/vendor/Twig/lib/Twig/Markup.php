@@ -21,7 +21,7 @@ class Twig_Markup implements Countable
 
     public function __construct($content, $charset)
     {
-        $this->content = (string) $content;
+        $this->content = (string)$content;
         $this->charset = $charset;
     }
 

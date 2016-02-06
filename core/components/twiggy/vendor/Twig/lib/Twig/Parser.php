@@ -82,7 +82,8 @@ class Twig_Parser
         }
 
         if (null === $this->expressionParser) {
-            $this->expressionParser = new Twig_ExpressionParser($this, $this->env->getUnaryOperators(), $this->env->getBinaryOperators());
+            $this->expressionParser = new Twig_ExpressionParser($this, $this->env->getUnaryOperators(),
+                $this->env->getBinaryOperators());
         }
 
         $this->stream = $stream;
@@ -114,7 +115,8 @@ class Twig_Parser
             throw $e;
         }
 
-        $node = new Twig_Node_Module(new Twig_Node_Body(array($body)), $this->parent, new Twig_Node($this->blocks), new Twig_Node($this->macros), new Twig_Node($this->traits), $this->embeddedTemplates, $this->getFilename());
+        $node = new Twig_Node_Module(new Twig_Node_Body(array($body)), $this->parent, new Twig_Node($this->blocks),
+            new Twig_Node($this->macros), new Twig_Node($this->traits), $this->embeddedTemplates, $this->getFilename());
 
         $traverser = new Twig_NodeTraverser($this->env, $this->visitors);
 
@@ -151,7 +153,8 @@ class Twig_Parser
                     $token = $this->getCurrentToken();
 
                     if ($token->getType() !== Twig_Token::NAME_TYPE) {
-                        throw new Twig_Error_Syntax('A block must start with a tag name', $token->getLine(), $this->getFilename());
+                        throw new Twig_Error_Syntax('A block must start with a tag name', $token->getLine(),
+                            $this->getFilename());
                     }
 
                     if (null !== $test && $test($token)) {
@@ -168,13 +171,16 @@ class Twig_Parser
 
                     if (!isset($this->handlers[$token->getValue()])) {
                         if (null !== $test) {
-                            $e = new Twig_Error_Syntax(sprintf('Unexpected "%s" tag', $token->getValue()), $token->getLine(), $this->getFilename());
+                            $e = new Twig_Error_Syntax(sprintf('Unexpected "%s" tag', $token->getValue()),
+                                $token->getLine(), $this->getFilename());
 
                             if (is_array($test) && isset($test[0]) && $test[0] instanceof Twig_TokenParserInterface) {
-                                $e->appendMessage(sprintf(' (expecting closing tag for the "%s" tag defined near line %s).', $test[0]->getTag(), $lineno));
+                                $e->appendMessage(sprintf(' (expecting closing tag for the "%s" tag defined near line %s).',
+                                    $test[0]->getTag(), $lineno));
                             }
                         } else {
-                            $e = new Twig_Error_Syntax(sprintf('Unknown "%s" tag.', $token->getValue()), $token->getLine(), $this->getFilename());
+                            $e = new Twig_Error_Syntax(sprintf('Unknown "%s" tag.', $token->getValue()),
+                                $token->getLine(), $this->getFilename());
                             $e->addSuggestions($token->getValue(), array_keys($this->env->getTags()));
                         }
 
@@ -191,7 +197,8 @@ class Twig_Parser
                     break;
 
                 default:
-                    throw new Twig_Error_Syntax('Lexer or parser ended up in unsupported state.', 0, $this->getFilename());
+                    throw new Twig_Error_Syntax('Lexer or parser ended up in unsupported state.', 0,
+                        $this->getFilename());
             }
         }
 
@@ -262,7 +269,8 @@ class Twig_Parser
      */
     public function isReservedMacroName($name)
     {
-        @trigger_error('The '.__METHOD__.' method is deprecated since version 2.0 and will be removed in 3.0.', E_USER_DEPRECATED);
+        @trigger_error('The ' . __METHOD__ . ' method is deprecated since version 2.0 and will be removed in 3.0.',
+            E_USER_DEPRECATED);
 
         return false;
     }
@@ -361,11 +369,13 @@ class Twig_Parser
             ||
             (!$node instanceof Twig_Node_Text && !$node instanceof Twig_Node_BlockReference && $node instanceof Twig_NodeOutputInterface)
         ) {
-            if (false !== strpos((string) $node, chr(0xEF).chr(0xBB).chr(0xBF))) {
-                throw new Twig_Error_Syntax('A template that extends another one cannot have a body but a byte order mark (BOM) has been detected; it must be removed.', $node->getLine(), $this->getFilename());
+            if (false !== strpos((string)$node, chr(0xEF) . chr(0xBB) . chr(0xBF))) {
+                throw new Twig_Error_Syntax('A template that extends another one cannot have a body but a byte order mark (BOM) has been detected; it must be removed.',
+                    $node->getLine(), $this->getFilename());
             }
 
-            throw new Twig_Error_Syntax('A template that extends another one cannot have a body.', $node->getLine(), $this->getFilename());
+            throw new Twig_Error_Syntax('A template that extends another one cannot have a body.', $node->getLine(),
+                $this->getFilename());
         }
 
         // bypass "set" nodes as they "capture" the output

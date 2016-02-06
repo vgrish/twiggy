@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 class Twig_Node_Expression_Array extends Twig_Node_Expression
 {
     private $index;
@@ -18,7 +19,7 @@ class Twig_Node_Expression_Array extends Twig_Node_Expression
 
         $this->index = -1;
         foreach ($this->getKeyValuePairs() as $pair) {
-            if ($pair['key'] instanceof Twig_Node_Expression_Constant && ctype_digit((string) $pair['key']->getAttribute('value')) && $pair['key']->getAttribute('value') > $this->index) {
+            if ($pair['key'] instanceof Twig_Node_Expression_Constant && ctype_digit((string)$pair['key']->getAttribute('value')) && $pair['key']->getAttribute('value') > $this->index) {
                 $this->index = $pair['key']->getAttribute('value');
             }
         }
@@ -30,7 +31,7 @@ class Twig_Node_Expression_Array extends Twig_Node_Expression
 
         foreach (array_chunk($this->nodes, 2) as $pair) {
             $pairs[] = array(
-                'key' => $pair[0],
+                'key'   => $pair[0],
                 'value' => $pair[1],
             );
         }
@@ -43,7 +44,7 @@ class Twig_Node_Expression_Array extends Twig_Node_Expression
         foreach ($this->getKeyValuePairs() as $pair) {
             // we compare the string representation of the keys
             // to avoid comparing the line numbers which are not relevant here.
-            if ((string) $key == (string) $pair['key']) {
+            if ((string)$key == (string)$pair['key']) {
                 return true;
             }
         }
@@ -73,8 +74,7 @@ class Twig_Node_Expression_Array extends Twig_Node_Expression
             $compiler
                 ->subcompile($pair['key'])
                 ->raw(' => ')
-                ->subcompile($pair['value'])
-            ;
+                ->subcompile($pair['value']);
         }
         $compiler->raw(')');
     }

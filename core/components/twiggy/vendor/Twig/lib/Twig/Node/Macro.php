@@ -22,7 +22,8 @@ class Twig_Node_Macro extends Twig_Node
     {
         foreach ($arguments as $argumentName => $argument) {
             if (self::VARARGS_NAME === $argumentName) {
-                throw new Twig_Error_Syntax(sprintf('The argument "%s" in macro "%s" cannot be defined because the variable "%s" is reserved for arbitrary arguments', self::VARARGS_NAME, $name, self::VARARGS_NAME), $argument->getLine());
+                throw new Twig_Error_Syntax(sprintf('The argument "%s" in macro "%s" cannot be defined because the variable "%s" is reserved for arbitrary arguments',
+                    self::VARARGS_NAME, $name, self::VARARGS_NAME), $argument->getLine());
             }
         }
 
@@ -33,16 +34,14 @@ class Twig_Node_Macro extends Twig_Node
     {
         $compiler
             ->addDebugInfo($this)
-            ->write(sprintf('public function macro_%s(', $this->getAttribute('name')))
-        ;
+            ->write(sprintf('public function macro_%s(', $this->getAttribute('name')));
 
         $count = count($this->getNode('arguments'));
         $pos = 0;
         foreach ($this->getNode('arguments') as $name => $default) {
             $compiler
-                ->raw('$__'.$name.'__ = ')
-                ->subcompile($default)
-            ;
+                ->raw('$__' . $name . '__ = ')
+                ->subcompile($default);
 
             if (++$pos < $count) {
                 $compiler->raw(', ');
@@ -60,28 +59,24 @@ class Twig_Node_Macro extends Twig_Node
         $compiler
             ->raw(")\n")
             ->write("{\n")
-            ->indent()
-        ;
+            ->indent();
 
         $compiler
             ->write("\$context = \$this->env->mergeGlobals(array(\n")
-            ->indent()
-        ;
+            ->indent();
 
         foreach ($this->getNode('arguments') as $name => $default) {
             $compiler
                 ->addIndentation()
                 ->string($name)
-                ->raw(' => $__'.$name.'__')
-                ->raw(",\n")
-            ;
+                ->raw(' => $__' . $name . '__')
+                ->raw(",\n");
         }
 
         $compiler
             ->addIndentation()
             ->string(self::VARARGS_NAME)
-            ->raw(' => ')
-        ;
+            ->raw(' => ');
 
         if (PHP_VERSION_ID >= 50600) {
             $compiler->raw("\$__varargs__,\n");
@@ -91,8 +86,7 @@ class Twig_Node_Macro extends Twig_Node
                 ->repr($count)
                 ->raw(' ? array_slice(func_get_args(), ')
                 ->repr($count)
-                ->raw(") : array(),\n")
-            ;
+                ->raw(") : array(),\n");
         }
 
         $compiler
@@ -112,7 +106,6 @@ class Twig_Node_Macro extends Twig_Node
             ->outdent()
             ->write("}\n")
             ->outdent()
-            ->write("}\n\n")
-        ;
+            ->write("}\n\n");
     }
 }

@@ -861,7 +861,7 @@ If you are looking for new tags, filters, or functions, have a look at the Twig 
 `extension repository`_.
 
 If you want to create your own, read the :ref:`Creating an
-Extension<creating_extensions>` chapter.
+        Extension<creating_extensions>` chapter.
 
 .. _`Twig bundle`:                https://github.com/Anomareh/PHP-Twig.tmbundle
 .. _`Jinja syntax plugin`:        http://jinja.pocoo.org/docs/integration/#vim

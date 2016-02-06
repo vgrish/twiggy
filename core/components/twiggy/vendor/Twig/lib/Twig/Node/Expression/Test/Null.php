@@ -25,7 +25,6 @@ class Twig_Node_Expression_Test_Null extends Twig_Node_Expression_Test
         $compiler
             ->raw('(null === ')
             ->subcompile($this->getNode('node'))
-            ->raw(')')
-        ;
+            ->raw(')');
     }
 }

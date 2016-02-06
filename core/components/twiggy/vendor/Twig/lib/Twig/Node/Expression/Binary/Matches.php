@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 class Twig_Node_Expression_Binary_Matches extends Twig_Node_Expression_Binary
 {
     public function compile(Twig_Compiler $compiler)
@@ -17,8 +18,7 @@ class Twig_Node_Expression_Binary_Matches extends Twig_Node_Expression_Binary
             ->subcompile($this->getNode('right'))
             ->raw(', ')
             ->subcompile($this->getNode('left'))
-            ->raw(')')
-        ;
+            ->raw(')');
     }
 
     public function operator(Twig_Compiler $compiler)

@@ -499,7 +499,7 @@ extension)::
 
 .. code-block:: jinja
 
-    {{ include(template_from_string("Hello {{ name }}")) }}
+{{ include(template_from_string("Hello {{ name }}")) }}
 
 From PHP, it's also possible to load a template stored in a string via
 ``Twig_Environment::createTemplate()``::

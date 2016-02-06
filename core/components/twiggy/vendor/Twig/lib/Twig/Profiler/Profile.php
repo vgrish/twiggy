@@ -125,8 +125,8 @@ class Twig_Profiler_Profile implements IteratorAggregate, Serializable
     public function enter()
     {
         $this->starts = array(
-            'wt' => microtime(true),
-            'mu' => memory_get_usage(),
+            'wt'  => microtime(true),
+            'mu'  => memory_get_usage(),
             'pmu' => memory_get_peak_usage(),
         );
     }
@@ -137,8 +137,8 @@ class Twig_Profiler_Profile implements IteratorAggregate, Serializable
     public function leave()
     {
         $this->ends = array(
-            'wt' => microtime(true),
-            'mu' => memory_get_usage(),
+            'wt'  => microtime(true),
+            'mu'  => memory_get_usage(),
             'pmu' => memory_get_peak_usage(),
         );
     }

@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 class Twig_Extension_StringLoader extends Twig_Extension
 {
     public function getFunctions()
@@ -30,12 +31,12 @@ class Twig_Extension_StringLoader extends Twig_Extension
  * {{ include(template_from_string("Hello {{ name }}")) }}
  * </pre>
  *
- * @param Twig_Environment $env      A Twig_Environment instance
+ * @param Twig_Environment $env A Twig_Environment instance
  * @param string           $template A template as a string or object implementing __toString()
  *
  * @return Twig_Template A Twig_Template instance
  */
 function twig_template_from_string(Twig_Environment $env, $template)
 {
-    return $env->createTemplate((string) $template);
+    return $env->createTemplate((string)$template);
 }

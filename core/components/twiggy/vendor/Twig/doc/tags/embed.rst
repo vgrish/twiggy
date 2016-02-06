@@ -73,7 +73,7 @@ two boxes side by side:
     ┌─── page layout ─────────────────────┐
     │                                     │
     │           ┌── block "content" ──┐   │
-    │           │                     │   │    
+    │           │                     │   │
     │           │ ┌ block ┐ ┌ block ┐ │   │
     │           │ │"left" │ │"right"│ │   │
     │           │ │       │ │       │ │   │

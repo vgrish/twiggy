@@ -31,8 +31,7 @@ class Twig_Node_ForLoop extends Twig_Node
             $compiler
                 ->write("++\$context['loop']['index0'];\n")
                 ->write("++\$context['loop']['index'];\n")
-                ->write("\$context['loop']['first'] = false;\n")
-            ;
+                ->write("\$context['loop']['first'] = false;\n");
 
             if (!$this->getAttribute('ifexpr')) {
                 $compiler
@@ -42,8 +41,7 @@ class Twig_Node_ForLoop extends Twig_Node
                     ->write("--\$context['loop']['revindex'];\n")
                     ->write("\$context['loop']['last'] = 0 === \$context['loop']['revindex0'];\n")
                     ->outdent()
-                    ->write("}\n")
-                ;
+                    ->write("}\n");
             }
         }
     }

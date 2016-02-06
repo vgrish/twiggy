@@ -28,7 +28,6 @@ class Twig_Node_Print extends Twig_Node implements Twig_NodeOutputInterface
             ->addDebugInfo($this)
             ->write('echo ')
             ->subcompile($this->getNode('expr'))
-            ->raw(";\n")
-        ;
+            ->raw(";\n");
     }
 }
