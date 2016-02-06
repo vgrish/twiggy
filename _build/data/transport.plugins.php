@@ -7,9 +7,10 @@ $tmp = array(
         'file'        => 'twiggy',
         'description' => '',
         'events'      => array(
-            'OnSiteRefresh'    => array(),
-            'OnTemplateSave'   => array(),
-            'OnTemplateRemove' => array()
+            'OnSiteRefresh'            => array(),
+            'OnTemplateSave'           => array(),
+            'OnTemplateRemove'         => array(),
+            'OnBeforeSaveWebPageCache' => array(),
         )
     )
 

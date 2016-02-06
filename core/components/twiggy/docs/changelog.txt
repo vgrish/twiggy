@@ -1,5 +1,9 @@
 Changelog for Twiggy.
 
+1.1.7-beta (06.02.2016)
+==============
+- Fix registry scripts
+
 1.1.6-beta (06.02.2016)
 ==============
 - Reformate code
