@@ -1,5 +1,10 @@
 Changelog for Twiggy.
 
+1.2.0-beta (07.02.2016)
+==============
+- Change function names
+- Change the name of the array placeholders
+
 1.1.8-beta (06.02.2016)
 ==============
 - Fix inline chunk

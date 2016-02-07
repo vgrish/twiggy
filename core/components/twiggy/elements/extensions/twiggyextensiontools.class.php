@@ -17,112 +17,6 @@ class TwiggyExtensionTools extends Twig_Extension
     }
 
     /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'twiggy/tools';
-    }
-
-    /**
-     * @return array
-     */
-    public function getFilters()
-    {
-        return array(
-            new Twig_SimpleFilter('pls', 'TwiggyExtensionTools::filterGetPls', array(
-                'needs_environment' => true
-            )),
-            new Twig_SimpleFilter('option', 'TwiggyExtensionTools::filterGetOption', array(
-                'needs_environment' => true
-            )),
-            new Twig_SimpleFilter('lexicon', 'TwiggyExtensionTools::filterLexicon', array(
-                'needs_environment' => true
-            )),
-            new Twig_SimpleFilter('makeUrl', 'TwiggyExtensionTools::filterMakeUrl', array(
-                'needs_environment' => true
-            )),
-            new Twig_SimpleFilter('toJson', 'TwiggyExtensionTools::filterToJson', array(
-                'needs_environment' => true
-            )),
-            new Twig_SimpleFilter('fromJson', 'TwiggyExtensionTools::filterFromJson', array(
-                'needs_environment' => true
-            )),
-            new Twig_SimpleFilter('toArray', 'TwiggyExtensionTools::filterToArray', array(
-                'needs_environment' => true
-            )),
-            new Twig_SimpleFilter('field', 'TwiggyExtensionTools::filterGetField', array(
-                'needs_environment' => true
-            )),
-        );
-    }
-
-
-    /**
-     * @param Twig_Environment $env
-     * @param                  $key
-     *
-     * @return mixed
-     */
-    public static function filterGetPls(Twig_Environment $env, $key)
-    {
-        return self::$modx->getPlaceholder($key);
-    }
-
-    /**
-     * @param Twig_Environment $env
-     * @param                  $key
-     * @param null             $options
-     * @param null             $default
-     * @param bool             $skipEmpty
-     *
-     * @return mixed
-     */
-    public static function filterGetOption(
-        Twig_Environment $env,
-        $key,
-        $options = null,
-        $default = null,
-        $skipEmpty = false
-    ) {
-        return self::$modx->getOption($key, $options, $default, $skipEmpty);
-    }
-
-    /**
-     * @param Twig_Environment $env
-     * @param                  $key
-     * @param array            $params
-     * @param string           $language
-     *
-     * @return null|string
-     */
-    public static function filterLexicon(Twig_Environment $env, $key, $params = array(), $language = '')
-    {
-        return self::$modx->lexicon($key, $params, $language);
-    }
-
-    /**
-     * @param Twig_Environment $env
-     * @param                  $id
-     * @param string           $context
-     * @param string           $args
-     * @param int              $scheme
-     * @param array            $options
-     *
-     * @return string
-     */
-    public static function filterMakeUrl(
-        Twig_Environment $env,
-        $id,
-        $context = '',
-        $args = '',
-        $scheme = -1,
-        array $options = array()
-    ) {
-        return self::$modx->makeUrl($id, $context, $args, $scheme, $options);
-    }
-
-    /**
      * @param Twig_Environment $env
      * @param                  $array
      *
@@ -196,56 +90,22 @@ class TwiggyExtensionTools extends Twig_Extension
     }
 
     /**
-     * @return array
+     * @param     $log
      */
-    public function getFunctions()
+    public static function log($log)
     {
-        return array(
-            new Twig_SimpleFunction('loadLexicon', 'TwiggyExtensionTools::loadLexicon'),
-            new Twig_SimpleFunction('lexicon', 'TwiggyExtensionTools::lexicon'),
-            new Twig_SimpleFunction('_', 'TwiggyExtensionTools::lexicon'),
-
-            new Twig_SimpleFunction('makeUrl', 'TwiggyExtensionTools::makeUrl'),
-            new Twig_SimpleFunction('toJson', 'TwiggyExtensionTools::toJson'),
-            new Twig_SimpleFunction('fromJson', 'TwiggyExtensionTools::fromJson'),
-            new Twig_SimpleFunction('toArray', 'TwiggyExtensionTools::toArray'),
-            new Twig_SimpleFunction('getField', 'TwiggyExtensionTools::getField'),
-            new Twig_SimpleFunction('getCount', 'TwiggyExtensionTools::getCount'),
-            new Twig_SimpleFunction('getObject', 'TwiggyExtensionTools::getObject'),
-            new Twig_SimpleFunction('sendError', 'TwiggyExtensionTools::sendError'),
-            new Twig_SimpleFunction('sendRedirect', 'TwiggyExtensionTools::sendRedirect'),
-            new Twig_SimpleFunction('sendForward', 'TwiggyExtensionTools::sendForward'),
-            new Twig_SimpleFunction('setPlaceholder', 'TwiggyExtensionTools::setPlaceholder'),
-            new Twig_SimpleFunction('setPlaceholders', 'TwiggyExtensionTools::setPlaceholders'),
-            new Twig_SimpleFunction('toPlaceholder', 'TwiggyExtensionTools::toPlaceholder'),
-            new Twig_SimpleFunction('toPlaceholders', 'TwiggyExtensionTools::toPlaceholders'),
-            new Twig_SimpleFunction('getPlaceholder', 'TwiggyExtensionTools::getPlaceholder'),
-            new Twig_SimpleFunction('getPlaceholders', 'TwiggyExtensionTools::getPlaceholders'),
-            new Twig_SimpleFunction('unsetPlaceholder', 'TwiggyExtensionTools::unsetPlaceholder'),
-            new Twig_SimpleFunction('unsetPlaceholders', 'TwiggyExtensionTools::unsetPlaceholders'),
-
-            new Twig_SimpleFunction('getInfo', 'TwiggyExtensionTools::getInfo'),
-            new Twig_SimpleFunction('getOption', 'TwiggyExtensionTools::getOption'),
-            new Twig_SimpleFunction('getPls', 'TwiggyExtensionTools::getPlaceholder'),
-
-            new Twig_SimpleFunction('var_dump', 'TwiggyExtensionTools::var_dump'),
-            new Twig_SimpleFunction('log', 'TwiggyExtensionTools::log'),
-            new Twig_SimpleFunction('chunk', 'TwiggyExtensionTools::chunk'),
-            new Twig_SimpleFunction('snippet', 'TwiggyExtensionTools::snippet'),
-            new Twig_SimpleFunction('processor', 'TwiggyExtensionTools::processor'),
-
-            new Twig_SimpleFunction('resource', 'TwiggyExtensionTools::resource'),
-            new Twig_SimpleFunction('user', 'TwiggyExtensionTools::user'),
-            new Twig_SimpleFunction('profile', 'TwiggyExtensionTools::profile'),
-
-            new Twig_SimpleFunction('isMember', 'TwiggyExtensionTools::isMember'),
-            new Twig_SimpleFunction('isAuthenticated', 'TwiggyExtensionTools::isAuthenticated'),
-            new Twig_SimpleFunction('hasSessionContext', 'TwiggyExtensionTools::hasSessionContext'),
-            new Twig_SimpleFunction('hasPermission', 'TwiggyExtensionTools::hasPermission')
-
-        );
+        self::$modx->log(modX::LOG_LEVEL_ERROR, print_r($log, 1));
     }
 
+    /**
+     * @param $log
+     */
+    public static function varDump($log)
+    {
+        echo "<pre class=\"twiggy var_dump\">\n";
+        var_dump($log);
+        echo "</pre>";
+    }
 
     /**
      * @param string $key
@@ -293,7 +153,6 @@ class TwiggyExtensionTools extends Twig_Extension
     {
         return self::$modx->getOption($key, $options, $default, $skipEmpty);
     }
-
 
     /**
      * 'ru:core:default'
@@ -537,41 +396,36 @@ class TwiggyExtensionTools extends Twig_Extension
     }
 
     /**
-     * @param $log
-     */
-    public static function var_dump($log)
-    {
-        echo "<pre class=\"twiggy var_dump\">\n";
-        var_dump($log);
-        echo "</pre>";
-    }
-
-    /**
-     * @param     $log
-     */
-    public static function log($log)
-    {
-        self::$modx->log(modX::LOG_LEVEL_ERROR, print_r($log, 1));
-    }
-
-    /**
      * @param       $name
      * @param array $properties
      *
      * @return mixed|string
      */
-    public static function chunk($name, array $properties = array(), $fastMode = false)
+    public static function getChunk($name, array $properties = array(), $fastMode = false)
     {
         return self::$Twiggy->getChunk($name, $properties, $fastMode);
     }
 
     /**
+     * @param string $name
+     * @param array  $properties
+     * @param string $prefix
+     * @param string $suffix
+     *
+     * @return mixed|string
+     */
+    public static function parseChunk($name = '', array $properties = array(), $prefix = '[[+', $suffix = ']]')
+    {
+        return self::$Twiggy->parseChunk($name, $properties, $fastMode);
+    }
+
+    /**
      * @param       $name
      * @param array $properties
      *
      * @return mixed|string
      */
-    public static function snippet($name, array $properties = array())
+    public static function runSnippet($name, array $properties = array())
     {
         $output = '';
         $cacheable = true;
@@ -597,7 +451,7 @@ class TwiggyExtensionTools extends Twig_Extension
      *
      * @return array
      */
-    public static function processor($action = '', array $properties = array())
+    public static function runProcessor($action = '', array $properties = array())
     {
         $options = array();
         $namespace = self::$modx->getOption('ns', $properties, null, true);
@@ -687,6 +541,30 @@ class TwiggyExtensionTools extends Twig_Extension
 
 
     /**
+     * @param null  $id
+     * @param int   $depth
+     * @param array $options
+     *
+     * @return array
+     */
+    public static function getChildIds($id = null, $depth = 10, array $options = array())
+    {
+        return self::$modx->getChildIds($id, $depth, $options);
+    }
+
+    /**
+     * @param null  $id
+     * @param int   $height
+     * @param array $options
+     *
+     * @return array
+     */
+    public static function getParentIds($id = null, $height = 10, array $options = array())
+    {
+        return self::$modx->getParentIds($id, $height, $options);
+    }
+
+    /**
      * @param      $groups
      * @param bool $matchAll
      *
@@ -725,6 +603,102 @@ class TwiggyExtensionTools extends Twig_Extension
     public static function hasPermission($pm)
     {
         return self::$modx->hasPermission($pm);
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'twiggy/tools';
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilters()
+    {
+        return array(
+            new Twig_SimpleFilter('toJson', 'TwiggyExtensionTools::filterToJson', array(
+                'needs_environment' => true
+            )),
+            new Twig_SimpleFilter('fromJson', 'TwiggyExtensionTools::filterFromJson', array(
+                'needs_environment' => true
+            )),
+            new Twig_SimpleFilter('toArray', 'TwiggyExtensionTools::filterToArray', array(
+                'needs_environment' => true
+            )),
+            new Twig_SimpleFilter('field', 'TwiggyExtensionTools::filterGetField', array(
+                'needs_environment' => true
+            )),
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getFunctions()
+    {
+        return array(
+            new Twig_SimpleFunction('log', 'TwiggyExtensionTools::log'),
+            new Twig_SimpleFunction('varDump', 'TwiggyExtensionTools::varDump'),
+            new Twig_SimpleFunction('getInfo', 'TwiggyExtensionTools::getInfo'),
+
+            new Twig_SimpleFunction('getOption', 'TwiggyExtensionTools::getOption'),
+
+            new Twig_SimpleFunction('loadLexicon', 'TwiggyExtensionTools::loadLexicon'),
+            new Twig_SimpleFunction('lexicon', 'TwiggyExtensionTools::lexicon'),
+            new Twig_SimpleFunction('_', 'TwiggyExtensionTools::lexicon'),
+
+            new Twig_SimpleFunction('makeUrl', 'TwiggyExtensionTools::makeUrl'),
+            new Twig_SimpleFunction('toJson', 'TwiggyExtensionTools::toJson'),
+            new Twig_SimpleFunction('fromJson', 'TwiggyExtensionTools::fromJson'),
+            new Twig_SimpleFunction('toArray', 'TwiggyExtensionTools::toArray'),
+
+            new Twig_SimpleFunction('getField', 'TwiggyExtensionTools::getField'),
+            new Twig_SimpleFunction('getCount', 'TwiggyExtensionTools::getCount'),
+            new Twig_SimpleFunction('getObject', 'TwiggyExtensionTools::getObject'),
+
+            new Twig_SimpleFunction('sendError', 'TwiggyExtensionTools::sendError'),
+            new Twig_SimpleFunction('sendRedirect', 'TwiggyExtensionTools::sendRedirect'),
+            new Twig_SimpleFunction('sendForward', 'TwiggyExtensionTools::sendForward'),
+
+            new Twig_SimpleFunction('setPlaceholder', 'TwiggyExtensionTools::setPlaceholder'),
+            new Twig_SimpleFunction('setPls', 'TwiggyExtensionTools::setPlaceholder'),
+
+            new Twig_SimpleFunction('toPlaceholder', 'TwiggyExtensionTools::toPlaceholder'),
+            new Twig_SimpleFunction('toPls', 'TwiggyExtensionTools::toPlaceholder'),
+
+            new Twig_SimpleFunction('getPlaceholder', 'TwiggyExtensionTools::getPlaceholder'),
+            new Twig_SimpleFunction('getPls', 'TwiggyExtensionTools::getPlaceholder'),
+
+            new Twig_SimpleFunction('unsetPlaceholder', 'TwiggyExtensionTools::unsetPlaceholder'),
+            new Twig_SimpleFunction('unsetPls', 'TwiggyExtensionTools::unsetPlaceholder'),
+
+            new Twig_SimpleFunction('setPlaceholders', 'TwiggyExtensionTools::setPlaceholders'),
+            new Twig_SimpleFunction('toPlaceholders', 'TwiggyExtensionTools::toPlaceholders'),
+            new Twig_SimpleFunction('getPlaceholders', 'TwiggyExtensionTools::getPlaceholders'),
+            new Twig_SimpleFunction('unsetPlaceholders', 'TwiggyExtensionTools::unsetPlaceholders'),
+
+            new Twig_SimpleFunction('getChunk', 'TwiggyExtensionTools::getChunk'),
+            new Twig_SimpleFunction('parseChunk', 'TwiggyExtensionTools::parseChunk'),
+
+            new Twig_SimpleFunction('runSnippet', 'TwiggyExtensionTools::runSnippet'),
+            new Twig_SimpleFunction('runProcessor', 'TwiggyExtensionTools::runProcessor'),
+
+            new Twig_SimpleFunction('user', 'TwiggyExtensionTools::user'),
+            new Twig_SimpleFunction('profile', 'TwiggyExtensionTools::profile'),
+            new Twig_SimpleFunction('resource', 'TwiggyExtensionTools::resource'),
+
+            new Twig_SimpleFunction('isMember', 'TwiggyExtensionTools::isMember'),
+            new Twig_SimpleFunction('isAuthenticated', 'TwiggyExtensionTools::isAuthenticated'),
+            new Twig_SimpleFunction('hasSessionContext', 'TwiggyExtensionTools::hasSessionContext'),
+            new Twig_SimpleFunction('hasPermission', 'TwiggyExtensionTools::hasPermission'),
+
+            new Twig_SimpleFunction('getChildIds', 'TwiggyExtensionTools::getChildIds'),
+            new Twig_SimpleFunction('getParentIds', 'TwiggyExtensionTools::getParentIds')
+
+        );
     }
 
 }

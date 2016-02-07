@@ -356,10 +356,10 @@ class Twiggy
         try {
             if ($fastMode) {
                 $twig->setLoader(new \Twig_Loader_Array(['tpl' => $content]));
-                $content = $twig->render('tpl', array('pls' => $pls));
+                $content = $twig->render('tpl', array('_' => $pls));
             } else {
                 $template = $twig->createTemplate($content);
-                $content = $template->render(array('pls' => $pls));
+                $content = $template->render(array('_' => $pls));
             }
         } catch (Exception $e) {
             $this->modx->log(modX::LOG_LEVEL_ERROR, $e->getMessage());
