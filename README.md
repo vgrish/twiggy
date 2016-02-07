@@ -8,42 +8,47 @@ Add extension and template inheritance.
 * base template
 
 ```
-<!DOCTYPE html> 
-<html>
-    <head>
-        {% block head %}
-            <link rel="stylesheet" href="style.css" />
-            <title>{% block title %}{% endblock %} - Мой сайт</title>
-        {% endblock %}
-    </head>
-    <body>
-        <div id="content">{% block content %}{% endblock %}</div>
-        <div id="footer">
-            {% block footer %}
-                &copy; Copyright 2013 <a href="http://example.com/">Вы</a>.
-            {% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+            {% include 'chunk|head' %}
+    {% endblock %}
+</head>
+<body>
+    {% block navbar %}
+            {% include 'chunk|navbar' %}
+    {% endblock %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                {% block content %}
+                    {{ modx.resource.content }}
+                {% endblock %}
+            </div>
+            <div class="col-md-2">
+                {% block sidebar %}
+                    Sidebar
+                {% endblock %}
+            </div>
         </div>
-    </body>
+        {% block footer %}
+            {% include 'chunk|footer' %}
+        {% endblock %}
+    </div>
+</body>
 </html>
 ```
 
 * inherited template
 
 ```
-{% extends "base" %}
-
-{% block title %}Главная{% endblock %}
-{% block head %}
-    {{ parent() }}
-    <style type="text/css">
-        .important { color: #336699; }
-    </style>
-{% endblock %}
+{% extends "template|base" %}
 {% block content %}
-    <h1>Главная</h1>
-    <p class="important">
-        Приветсвую на своем потрясном сайте!
-    </p>
+    <h3>{{ modx.resource.pagetitle }}</h3>
+    <div class="jumbotron">
+        {{ modx.resource.parent }}
+    </div>
 {% endblock %}
 ```
 
@@ -59,56 +64,58 @@ Add extension and template inheritance.
 
 * Filters
 
-* pls - 
-* option - 
-* lexicon -
-* makeUrl -
 * toJson - 
 * fromJson - 
 * toArray - 
 * field - 
 
 ```
-{{ 'site_name'|option }}
-{{ '+upload_images'|pls }}
-{{ '[[*id]]'|makeUrl('','',1) }}
 {{ dump(modx.getObject('modUserProfile', 1)|toArray) }}
  
 ```
 
 * Functions
 
-* lexicon - 
+* log - 
+* varDump - 
+* getInfo -
+* getOption - 
+* loadLexicon -
+* lexicon (_) - 
+
 * makeUrl - 
-* toJson -
+* toJson - 
 * fromJson - 
-* getField -
+* toArray - 
+
+* getField - 
 * getCount - 
 * getObject - 
+
 * sendError - 
 * sendRedirect - 
 * sendForward - 
-* setPlaceholder - 
-* setPlaceholders - 
-* toPlaceholder - 
-* toPlaceholders - 
-* getPlaceholder (getPls) - 
-* getPlaceholders - 
-* unsetPlaceholder - 
-* unsetPlaceholders - 
-* getOption - 
 
-* chunk - 
-* snippet - 
-* processor - 
+* setPlaceholder (setPls) - 
+* toPlaceholder (toPls) - 
+* getPlaceholder (getPls) - 
+* unsetPlaceholder (unsetPls) - 
+
+* getChunk - 
+* parseChunk - 
+* runSnippet - 
+* runProcessor - 
+
+* getChildIds - 
+* getParentIds - 
 
 ```
 {{ getCount('modUser') }}
 {{ getObject('modUserProfile', {'email':'admin@mail.ru'})|toJson }}
-{{ chunk('@INLINE [[+name]]',{'name':'Володя Володин'}) }}
-{{ snippet('pdoNeighbors') }}
+{{ getChunk('@INLINE _['name']',{'name':'Володя Володин'}) }}
+{{ runSnippet('pdoNeighbors') }}
 
-{% set response = processor('mgr/valute/getlist',{'ns':'currencyrate', 'sortdir':'asc'}) %}
+{% set response = runProcessor('mgr/valute/getlist',{'ns':'currencyrate', 'sortdir':'asc'}) %}
 {# { dump(response) }#}
 {% for result in response.response.results %}
     <h5>{{ result.charcode }}</h5>
