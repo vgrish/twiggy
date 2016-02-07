@@ -24,7 +24,7 @@ $tmp = array(
 
     'extensions' => array(
         'xtype' => 'textarea',
-        'value' => 'Tools,Cache,Pcre', // DebugBar
+        'value' => 'Tools,Cache,Pcre,ChromePhp', // ChromePhp
         'area'  => 'twiggy_main',
     ),
 
