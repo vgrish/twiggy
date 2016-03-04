@@ -1,5 +1,9 @@
 Changelog for Twiggy.
 
+1.2.2-beta (04.03.2016)
+==============
+- Fix get pdoTools config
+
 1.2.1-beta (07.02.2016)
 ==============
 - Add extension "ChromePhp" (https://craig.is/writing/chrome-logger)

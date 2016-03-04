@@ -19,7 +19,7 @@ class twiggyPdoFetch extends pdoFetch
         parent::__construct($modx, $config);
         $corePath = $this->modx->getOption('twiggy_core_path', null,
             $this->modx->getOption('core_path', null, MODX_CORE_PATH) . 'components/twiggy/');
-        $this->Twiggy = $this->modx->getService('Twiggy', 'Twiggy', $corePath . 'model/twiggy/', $config);
+        $this->Twiggy = $this->modx->getService('Twiggy', 'Twiggy', $corePath . 'model/twiggy/', $this->config);
     }
 
 
