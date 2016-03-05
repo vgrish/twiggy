@@ -10,8 +10,10 @@ class twiggyOnBeforeSaveWebPageCache extends twiggyPlugin
     {
         if (is_object($this->modx->resource) AND $this->modx->resource instanceof modResource) {
             $this->modx->resource->_jscripts = $this->modx->jscripts;
+
+            /* остальное нельзя кэшировать
             $this->modx->resource->_sjscripts = $this->modx->sjscripts;
-            $this->modx->resource->_loadedjscripts = $this->modx->loadedjscripts;
+            $this->modx->resource->_loadedjscripts = $this->modx->loadedjscripts;*/
         }
     }
 }

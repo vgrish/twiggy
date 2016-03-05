@@ -53,6 +53,16 @@ class twiggyParser extends modParser
     ) {
         if (is_string($content) AND $processUncacheable AND preg_match('#\{.*\}#', $content)) {
             $content = $this->Twiggy->process($content, $this->modx->placeholders);
+
+            if (!empty($this->modx->resource) AND is_object($this->modx->resource)) {
+
+                if ($this->modx->resource->get('_content')) {
+                    if ($this->modx->resource->get('_jscripts')) {
+                        $this->modx->jscripts = $this->modx->resource->get('_jscripts');
+                    }
+                }
+            }
+
         }
 
         return parent::processElementTags($parentTag, $content, $processUncacheable, $removeUnprocessed, $prefix,

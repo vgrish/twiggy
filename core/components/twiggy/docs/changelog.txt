@@ -1,5 +1,9 @@
 Changelog for Twiggy.
 
+1.2.3-beta (05.03.2016)
+==============
+- Fix loadedjscripts
+
 1.2.2-beta (04.03.2016)
 ==============
 - Fix get pdoTools config
