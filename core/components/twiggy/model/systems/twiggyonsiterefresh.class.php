@@ -4,7 +4,7 @@ class twiggyOnSiteRefresh extends twiggyPlugin
 {
     public function run()
     {
-        $this->Twiggy->clearTwiggyCache();
+        $this->twiggy->clearTwiggyCache();
     }
 
 }

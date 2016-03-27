@@ -4,23 +4,25 @@ abstract class twiggyPlugin
 {
     /** @var modX $modx */
     protected $modx;
-    /** @var Twiggy $Twiggy */
-    protected $Twiggy;
+    /** @var Twiggy $twiggy */
+    protected $twiggy;
     /** @var array $scriptProperties */
     protected $scriptProperties;
 
-    public function __construct($modx, &$scriptProperties)
+    public function __construct(modX $modx, &$scriptProperties)
     {
         $this->scriptProperties =& $scriptProperties;
         $this->modx = $modx;
-        $this->twiggy = $this->modx->Twiggy;
 
-        if (!is_object($this->Twiggy) OR !($this->Twiggy instanceof Twiggy)) {
-            $corePath = $this->modx->getOption('twiggy_core_path', null,
-                $this->modx->getOption('core_path', null, MODX_CORE_PATH) . 'components/twiggy/');
-            $this->Twiggy = $this->modx->getService('Twiggy', 'Twiggy', $corePath . 'model/twiggy/',
-                $this->scriptProperties);
-        }
+        $fqn = $modx->getOption('twiggy_class', null, 'twiggy.twiggy', true);
+        $path = $modx->getOption('twiggy_class_path', null, MODX_CORE_PATH . 'components/twiggy/model/', true);
+        $this->twiggy = $modx->getService(
+            $fqn,
+            '',
+            $path,
+            $this->scriptProperties
+        );
+
     }
 
     abstract public function run();

@@ -1,14 +1,15 @@
 <?php
 
 if (!class_exists('modParser')) {
-    require_once MODX_CORE_PATH . 'model/modx/modparser.class.php';
+    /** @noinspection PhpIncludeInspection */
+    require MODX_CORE_PATH . 'model/modx/modparser.class.php';
 }
 
 class twiggyParser extends modParser
 {
 
-    /** @var Twiggy $Twiggy */
-    public $Twiggy;
+    /** @var Twiggy $twiggy */
+    public $twiggy;
 
     /**
      * twiggyParser constructor.
@@ -18,15 +19,13 @@ class twiggyParser extends modParser
     function __construct(xPDO &$modx)
     {
         parent::__construct($modx);
-        $fqn = $modx->getOption('twiggy_class', null, 'twiggy.Twiggy', true);
-        if ($twiggyClass = $modx->loadClass($fqn, '', false, true)) {
-            $this->Twiggy = new $twiggyClass($modx);
-        } elseif ($twiggyClass = $modx->loadClass($fqn, MODX_CORE_PATH . 'components/twiggy/model/', false, true)) {
-            $this->Twiggy = new $twiggyClass($modx);
-        } else {
-            $modx->log(modX::LOG_LEVEL_ERROR,
-                '[twiggy] Could not load twiggy from "MODX_CORE_PATH/components/twiggy/model/".');
+        
+        $fqn = $modx->getOption('twiggy_class', null, 'twiggy.twiggy', true);
+        $path = $modx->getOption('twiggy_class_path', null, MODX_CORE_PATH . 'components/twiggy/model/', true);
+        if ($twiggyClass = $modx->loadClass($fqn, $path, false, true)) {
+            $this->twiggy = new $twiggyClass($modx);
         }
+
     }
 
     /**
@@ -52,7 +51,7 @@ class twiggyParser extends modParser
         $depth = 0
     ) {
         if (is_string($content) AND $processUncacheable AND preg_match('#\{.*\}#', $content)) {
-            $content = $this->Twiggy->process($content, $this->modx->placeholders);
+            $content = $this->twiggy->process($content, $this->modx->placeholders);
         }
 
         if ($processUncacheable AND $removeUnprocessed AND

@@ -9,32 +9,28 @@ if (!$modx = $object->xpdo AND !$object->xpdo instanceof modX) {
 switch ($options[xPDOTransport::PACKAGE_ACTION]) {
     case xPDOTransport::ACTION_INSTALL:
     case xPDOTransport::ACTION_UPGRADE:
-        /** @var modContextSetting $tmp */
-        if (!$tmp = $modx->getObject('modContextSetting', array('context_key' => 'web', 'key' => 'parser_class'))) {
-            $tmp = $modx->newObject('modContextSetting');
+
+        if (!$tmp = $modx->getObject('modSystemSetting', array('key' => 'parser_class'))) {
+            $tmp = $modx->newObject('modSystemSetting');
         }
         $tmp->fromArray(array(
-            'context_key' => 'web',
-            'key'         => 'parser_class',
-            'xtype'       => 'textfield',
-            'namespace'   => 'twiggy',
-            'area'        => 'twiggy_main',
-            'value'       => 'twiggyParser',
+            'namespace' => 'pdotools',
+            'area'      => 'pdotools_main',
+            'xtype'     => 'textfield',
+            'value'     => 'twiggy.twiggyparser',
+            'key'       => 'parser_class',
         ), '', true, true);
         $tmp->save();
-        /** @var modContextSetting $tmp */
-        if (!$tmp = $modx->getObject('modContextSetting',
-            array('context_key' => 'web', 'key' => 'parser_class_path'))
-        ) {
-            $tmp = $modx->newObject('modContextSetting');
+
+        if (!$tmp = $modx->getObject('modSystemSetting', array('key' => 'parser_class_path'))) {
+            $tmp = $modx->newObject('modSystemSetting');
         }
         $tmp->fromArray(array(
-            'context_key' => 'web',
-            'key'         => 'parser_class_path',
-            'xtype'       => 'textfield',
-            'namespace'   => 'twiggy',
-            'area'        => 'twiggy_main',
-            'value'       => '{core_path}components/twiggy/model/twiggy/',
+            'namespace' => 'pdotools',
+            'area'      => 'pdotools_main',
+            'xtype'     => 'textfield',
+            'value'     => '{core_path}components/twiggy/model/',
+            'key'       => 'parser_class_path',
         ), '', true, true);
         $tmp->save();
 
@@ -46,7 +42,7 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
             'namespace' => 'pdotools',
             'area'      => 'pdotools_main',
             'xtype'     => 'textfield',
-            'value'     => 'twiggy.twiggypdofetch',
+            'value'     => 'twiggypdotools.twiggypdofetch',
             'key'       => 'pdoFetch.class',
         ), '', true, true);
         $tmp->save();
@@ -58,8 +54,20 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
             'namespace' => 'pdotools',
             'area'      => 'pdotools_main',
             'xtype'     => 'textfield',
-            'value'     => 'twiggy.twiggypdotools',
+            'value'     => 'twiggypdotools.twiggypdotools',
             'key'       => 'pdoTools.class',
+        ), '', true, true);
+        $tmp->save();
+
+        if (!$tmp = $modx->getObject('modSystemSetting', array('key' => 'pdotools_class_path'))) {
+            $tmp = $modx->newObject('modSystemSetting');
+        }
+        $tmp->fromArray(array(
+            'namespace' => 'pdotools',
+            'area'      => 'pdotools_main',
+            'xtype'     => 'textfield',
+            'value'     => '{core_path}components/twiggy/model/',
+            'key'       => 'pdotools_class_path',
         ), '', true, true);
         $tmp->save();
 
@@ -74,22 +82,14 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
             'key'       => 'pdotools_fenom_default',
         ), '', true, true);
         $tmp->save();
-
-
         break;
+
     case xPDOTransport::ACTION_UNINSTALL:
-        $modx->removeCollection('modSystemSetting', array('area' => 'twiggy_main'));
-        $modx->removeCollection('modContextSetting', array('area' => 'twiggy_main'));
-
         /* pdoTools */
-        if ($tmp = $modx->getObject('modSystemSetting', array('key' => 'pdoFetch.class'))) {
-            $tmp->set('value', 'pdotools.pdofetch');
-            $tmp->save();
-        }
-
-        if ($tmp = $modx->getObject('modSystemSetting', array('key' => 'pdoTools.class'))) {
-            $tmp->set('value', 'pdotools.pdotools');
-            $tmp->save();
+        foreach (array('pdoFetch.class', 'pdoTools.class', 'pdotools_class_path') as $k) {
+            if ($tmp = $modx->getObject('modSystemSetting', array('key' => $k))) {
+                $tmp->remove();
+            }
         }
 
         if ($tmp = $modx->getObject('modSystemSetting', array('key' => 'pdotools_fenom_default'))) {
@@ -97,6 +97,30 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
             $tmp->save();
         }
 
+        if ($modx->getCount('modSystemSetting', array('key' => 'pdotools_fenom_default'))) {
+
+            if ($tmp = $modx->getObject('modSystemSetting', array('key' => 'parser_class'))) {
+                $tmp->fromArray(array(
+                    'namespace' => 'pdotools',
+                    'area'      => 'pdotools_main',
+                    'xtype'     => 'textfield',
+                    'value'     => 'pdoParser',
+                    'key'       => 'parser_class',
+                ), '', true, true);
+                $tmp->save();
+            }
+
+            if ($tmp = $modx->getObject('modSystemSetting', array('key' => 'parser_class_path'))) {
+                $tmp->fromArray(array(
+                    'namespace' => 'pdotools',
+                    'area'      => 'pdotools_main',
+                    'xtype'     => 'textfield',
+                    'value'     => '{core_path}components/pdotools/model/pdotools/',
+                    'key'       => 'parser_class_path',
+                ), '', true, true);
+                $tmp->save();
+            }
+        }
 
         break;
 }

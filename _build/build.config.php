@@ -4,7 +4,7 @@
 define('PKG_NAME', 'Twiggy');
 define('PKG_NAME_LOWER', 'twiggy');
 
-define('PKG_VERSION', '1.2.3');
+define('PKG_VERSION', '1.2.5');
 define('PKG_RELEASE', 'beta');
 define('PKG_AUTO_INSTALL', true);
 define('PKG_NAMESPACE_PATH', '{core_path}components/twiggy/');
@@ -51,5 +51,6 @@ $BUILD_VALIDATORS = array(
 );
 
 $BUILD_RESOLVERS = array(
+    'extension',
     'setting'
 );

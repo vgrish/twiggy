@@ -6,7 +6,7 @@ $tmp = array(
 
     'class'           => array(
         'xtype' => 'textfield',
-        'value' => 'twiggy.Twiggy',
+        'value' => 'twiggy.twiggy',
         'area'  => 'twiggy_main',
     ),
     'path_extensions' => array(

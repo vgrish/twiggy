@@ -4,15 +4,15 @@ class TwiggyLoaderChunk extends Twig_Loader_Array
 {
     /** @var MODx $modx */
     private $modx;
-    /** @var Twiggy $Twiggy */
-    private $Twiggy;
+    /** @var Twiggy $twiggy */
+    private $twiggy;
 
     /**
      * @param Twiggy $Twiggy
      */
     public function __construct(Twiggy &$Twiggy)
     {
-        $this->Twiggy = &$Twiggy;
+        $this->twiggy = &$Twiggy;
         $this->modx = &$Twiggy->modx;
     }
 
@@ -67,7 +67,7 @@ class TwiggyLoaderChunk extends Twig_Loader_Array
                 $properties = $element->getProperties();
             }
             if (!empty($content) AND !empty($properties)) {
-                $content = $this->Twiggy->parseChunk('@INLINE ' . $content, $properties);
+                $content = $this->twiggy->parseChunk('@INLINE ' . $content, $properties);
             }
         }
 
@@ -92,7 +92,7 @@ class TwiggyLoaderChunk extends Twig_Loader_Array
      */
     public function isFresh($name, $time)
     {
-        return !(boolean)$this->Twiggy->getOption('debug', $this->Twiggy->config, false, true);
+        return !(boolean)$this->twiggy->getOption('debug', $this->twiggy->config, false, true);
     }
 
 }

@@ -4,16 +4,16 @@ class TwiggyExtensionTools extends Twig_Extension
 {
     /** @var MODx $modx */
     static private $modx;
-    /** @var Twiggy $Twiggy */
-    static private $Twiggy;
+    /** @var Twiggy $twiggy */
+    static private $twiggy;
 
     /**
-     * @param Twiggy $Twiggy
+     * @param Twiggy $twiggy
      */
-    public function __construct(Twiggy &$Twiggy)
+    public function __construct(Twiggy &$twiggy)
     {
-        self::$Twiggy = &$Twiggy;
-        self::$modx = &$Twiggy->modx;
+        self::$twiggy = &$twiggy;
+        self::$modx = &$twiggy->modx;
     }
 
     /**
@@ -403,7 +403,7 @@ class TwiggyExtensionTools extends Twig_Extension
      */
     public static function getChunk($name, array $properties = array(), $fastMode = false)
     {
-        return self::$Twiggy->getChunk($name, $properties, $fastMode);
+        return self::$twiggy->getChunk($name, $properties, $fastMode);
     }
 
     /**
@@ -416,7 +416,7 @@ class TwiggyExtensionTools extends Twig_Extension
      */
     public static function parseChunk($name = '', array $properties = array(), $prefix = '[[+', $suffix = ']]')
     {
-        return self::$Twiggy->parseChunk($name, $properties, $fastMode);
+        return self::$twiggy->parseChunk($name, $properties, $prefix, $suffix);
     }
 
     /**

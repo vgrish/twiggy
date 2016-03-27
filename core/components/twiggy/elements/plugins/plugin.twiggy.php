@@ -1,11 +1,16 @@
 <?php
 
 /** @var array $scriptProperties */
-/** @var twiggy $twiggy */
-$corePath = $modx->getOption('twiggy_core_path', null,
-    $modx->getOption('core_path', null, MODX_CORE_PATH) . 'components/twiggy/');
-$twiggy = $modx->getService('Twiggy', 'Twiggy', $corePath . 'model/twiggy/', array('core_path' => $corePath));
 
+$fqn = $modx->getOption('twiggy_class', null, 'twiggy.twiggy', true);
+$corePath = $modx->getOption('twiggy_class_path', null, MODX_CORE_PATH . 'components/twiggy/', true);
+/** @var Twiggy $twiggy */
+$twiggy = $modx->getService(
+    $fqn,
+    '',
+    $corePath . 'model',
+    array('core_path' => $corePath)
+);
 $className = 'twiggy' . $modx->event->name;
 $modx->loadClass('twiggyPlugin', $corePath . 'model/systems/', true, true);
 $modx->loadClass($className, $corePath . 'model/systems/', true, true);

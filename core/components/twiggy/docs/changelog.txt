@@ -1,5 +1,10 @@
 Changelog for Twiggy.
 
+1.2.4-beta - 1.2.4-beta (27.03.2016)
+==============
+- Remove files from system core
+- Improved compatibility with PdoTools
+
 1.2.3-beta (05.03.2016)
 ==============
 - Fix loadedjscripts

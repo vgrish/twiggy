@@ -4,18 +4,18 @@ class TwiggyLoaderFile extends Twig_Loader_Filesystem
 {
     /** @var MODx $modx */
     private $modx;
-    /** @var Twiggy $Twiggy */
-    private $Twiggy;
+    /** @var Twiggy $twiggy */
+    private $twiggy;
 
     /**
      * @param Twiggy $Twiggy
      */
     public function __construct(Twiggy &$Twiggy)
     {
-        $this->Twiggy = &$Twiggy;
+        $this->twiggy = &$Twiggy;
         $this->modx = &$Twiggy->modx;
 
-        $paths = $this->Twiggy->explodeAndClean($this->Twiggy->getOption('path_templates', null, '', true));
+        $paths = $this->twiggy->explodeAndClean($this->twiggy->getOption('path_templates', null, '', true));
         $this->setPaths($paths);
     }
 

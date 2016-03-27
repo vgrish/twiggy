@@ -7,16 +7,16 @@ class TwiggyExtensionCache extends Twig_Extension
 {
     /** @var MODx $modx */
     private $modx;
-    /** @var Twiggy $Twiggy */
-    private $Twiggy;
+    /** @var Twiggy $twiggy */
+    private $twiggy;
 
     /**
-     * @param Twiggy $Twiggy
+     * @param Twiggy $twiggy
      */
-    public function __construct(Twiggy &$Twiggy)
+    public function __construct(Twiggy &$twiggy)
     {
-        $this->Twiggy = &$Twiggy;
-        $this->modx = &$Twiggy->modx;
+        $this->twiggy = &$twiggy;
+        $this->modx = &$twiggy->modx;
     }
 
     /**
@@ -32,7 +32,7 @@ class TwiggyExtensionCache extends Twig_Extension
      */
     public function getTwiggy()
     {
-        return $this->Twiggy;
+        return $this->twiggy;
     }
 
     /**
@@ -77,7 +77,7 @@ class TwiggyExtensionCache extends Twig_Extension
             'cacheTime' => 0,
         );
 
-        return $this->Twiggy->getCache($options);
+        return $this->twiggy->getCache($options);
     }
 
     /**
@@ -94,6 +94,6 @@ class TwiggyExtensionCache extends Twig_Extension
             'cacheTime' => $time,
         );
 
-        return $this->Twiggy->setCache($data, $options);
+        return $this->twiggy->setCache($data, $options);
     }
 }
