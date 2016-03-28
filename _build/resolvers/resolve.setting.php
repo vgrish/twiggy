@@ -71,6 +71,18 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
         ), '', true, true);
         $tmp->save();
 
+        if (!$tmp = $modx->getObject('modSystemSetting', array('key' => 'pdofetch_class_path'))) {
+            $tmp = $modx->newObject('modSystemSetting');
+        }
+        $tmp->fromArray(array(
+            'namespace' => 'pdotools',
+            'area'      => 'pdotools_main',
+            'xtype'     => 'textfield',
+            'value'     => '{core_path}components/twiggy/model/',
+            'key'       => 'pdofetch_class_path',
+        ), '', true, true);
+        $tmp->save();
+
         if (!$tmp = $modx->getObject('modSystemSetting', array('key' => 'pdotools_fenom_default'))) {
             $tmp = $modx->newObject('modSystemSetting');
         }
@@ -86,7 +98,7 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
 
     case xPDOTransport::ACTION_UNINSTALL:
         /* pdoTools */
-        foreach (array('pdoFetch.class', 'pdoTools.class', 'pdotools_class_path') as $k) {
+        foreach (array('pdoFetch.class', 'pdoTools.class', 'pdotools_class_path', 'pdofetch_class_path') as $k) {
             if ($tmp = $modx->getObject('modSystemSetting', array('key' => $k))) {
                 $tmp->remove();
             }
