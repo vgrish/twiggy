@@ -1,5 +1,9 @@
 Changelog for Twiggy.
 
+1.2.8-beta (05.04.2016)
+==============
+- Fix "Pcre" extension
+
 1.2.7-beta (28.03.2016)
 ==============
 - Add setting "pdofetch_class_path"

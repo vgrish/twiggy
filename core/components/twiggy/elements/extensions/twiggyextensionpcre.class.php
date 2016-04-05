@@ -1,16 +1,64 @@
 <?php
 
 
-class TwiggyPcreFilters
+/**
+ * Class Twig_Extensions_Extension_Pcre
+ *
+ * from https://github.com/jasny/twig-extensions/blob/master/src/Jasny/Twig/PcreExtension.php
+ *
+ */
+class TwiggyExtensionPcre extends Twig_Extension
 {
+
     /**
-     * @param Twig_Environment $env
-     * @param                  $value
-     * @param string           $delimiter
-     *
-     * @return null|string
+     * Class constructor
      */
-    static function quote(Twig_Environment $env, $value, $delimiter = '/')
+    public function __construct()
+    {
+        if (!extension_loaded('pcre')) {
+            throw new \Exception("The Twig PCRE extension requires PHP extension 'pcre' (see http://www.php.net/pcre).");
+        }
+    }
+
+    /**
+     * Callback for Twig
+     * @ignore
+     */
+    public function getFilters()
+    {
+        return array(
+            'preg_quote'   => new \Twig_SimpleFilter('preg_quote', array($this, 'quote')),
+            'preg_match'   => new \Twig_SimpleFilter('preg_match', array($this, 'match')),
+            'preg_get'     => new \Twig_SimpleFilter('preg_get', array($this, 'get')),
+            'preg_get_all' => new \Twig_SimpleFilter('preg_get_all', array($this, 'getAll')),
+            'preg_grep'    => new \Twig_SimpleFilter('preg_grep', array($this, 'grep')),
+            'preg_replace' => new \Twig_SimpleFilter('preg_replace', array($this, 'replace')),
+            'preg_filter'  => new \Twig_SimpleFilter('preg_filter', array($this, 'filter')),
+            'preg_split'   => new \Twig_SimpleFilter('preg_splig', array($this, 'split')),
+        );
+    }
+
+    /**
+     * Check that the regex doesn't use the eval modifier
+     *
+     * @param string $pattern
+     */
+    protected function assertNoEval($pattern)
+    {
+        if (preg_match('/(.).*\1(.+)$/', trim($pattern), $match) && strpos($match[1], 'e') !== false) {
+            throw new \Exception("Using the eval modifier for regular expressions is not allowed");
+        }
+    }
+
+    /**
+     * Quote regular expression characters.
+     *
+     * @param string $value
+     * @param string $delimiter
+     *
+     * @return string
+     */
+    public function quote($value, $delimiter = '/')
     {
         if (!isset($value)) {
             return null;
@@ -19,19 +67,36 @@ class TwiggyPcreFilters
         return preg_quote($value, $delimiter);
     }
 
+    /**
+     * Perform a regular expression match.
+     *
+     * @param string $value
+     * @param string $pattern
+     *
+     * @return boolean
+     */
+    public function match($value, $pattern)
+    {
+        $this->assertNoEval($pattern);
+
+        if (!isset($value)) {
+            return null;
+        }
+
+        return preg_match($pattern, $value);
+    }
 
     /**
-     * @param Twig_Environment $env
-     * @param                  $value
-     * @param                  $pattern
-     * @param int              $group
+     * Perform a regular expression match and return a matched group.
      *
-     * @return null
-     * @throws Exception
+     * @param string $value
+     * @param string $pattern
+     *
+     * @return string
      */
-    static function get(Twig_Environment $env, $value, $pattern, $group = 0)
+    public function get($value, $pattern, $group = 0)
     {
-        self::assertNoEval($pattern);
+        $this->assertNoEval($pattern);
 
         if (!isset($value)) {
             return null;
@@ -44,16 +109,16 @@ class TwiggyPcreFilters
     }
 
     /**
-     * @param     $value
-     * @param     $pattern
-     * @param int $group
+     * Perform a regular expression match and return the group for all matches.
      *
-     * @return array|null
-     * @throws Exception
+     * @param string $value
+     * @param string $pattern
+     *
+     * @return array
      */
-    static function getAll($value, $pattern, $group = 0)
+    public function getAll($value, $pattern, $group = 0)
     {
-        self::assertNoEval($pattern);
+        $this->assertNoEval($pattern);
 
         if (!isset($value)) {
             return null;
@@ -66,16 +131,17 @@ class TwiggyPcreFilters
     }
 
     /**
-     * @param        $values
-     * @param        $pattern
-     * @param string $flags
+     * Perform a regular expression match and return an array of entries that match the pattern
      *
-     * @return array|null
-     * @throws Exception
+     * @param array  $values
+     * @param string $pattern
+     * @param strign $flags Optional 'invert' to return entries that do not match the given pattern.
+     *
+     * @return array
      */
-    static function grep($values, $pattern, $flags = '')
+    public function grep($values, $pattern, $flags = '')
     {
-        self::assertNoEval($pattern);
+        $this->assertNoEval($pattern);
 
         if (!isset($values)) {
             return null;
@@ -89,17 +155,18 @@ class TwiggyPcreFilters
     }
 
     /**
-     * @param        $value
-     * @param        $pattern
+     * Perform a regular expression search and replace.
+     *
+     * @param string $value
+     * @param string $pattern
      * @param string $replacement
      * @param int    $limit
      *
-     * @return mixed|null
-     * @throws Exception
+     * @return string
      */
-    static function replace($value, $pattern, $replacement = '', $limit = -1)
+    public function replace($value, $pattern, $replacement = '', $limit = -1)
     {
-        self::assertNoEval($pattern);
+        $this->assertNoEval($pattern);
 
         if (!isset($value)) {
             return null;
@@ -109,17 +176,18 @@ class TwiggyPcreFilters
     }
 
     /**
-     * @param        $value
-     * @param        $pattern
+     * Perform a regular expression search and replace, returning only matched subjects.
+     *
+     * @param string $value
+     * @param string $pattern
      * @param string $replacement
      * @param int    $limit
      *
-     * @return mixed|null
-     * @throws Exception
+     * @return string
      */
-    static function filter($value, $pattern, $replacement = '', $limit = -1)
+    public function filter($value, $pattern, $replacement = '', $limit = -1)
     {
-        self::assertNoEval($pattern);
+        $this->assertNoEval($pattern);
 
         if (!isset($value)) {
             return null;
@@ -129,15 +197,16 @@ class TwiggyPcreFilters
     }
 
     /**
-     * @param $value
-     * @param $pattern
+     * Split text into an array using a regular expression.
      *
-     * @return array|null
-     * @throws Exception
+     * @param string $value
+     * @param string $pattern
+     *
+     * @return array
      */
-    static function split($value, $pattern)
+    public function split($value, $pattern)
     {
-        self::assertNoEval($pattern);
+        $this->assertNoEval($pattern);
 
         if (!isset($value)) {
             return null;
@@ -148,92 +217,11 @@ class TwiggyPcreFilters
 
 
     /**
-     * @param Twig_Environment $env
-     * @param                  $value
-     * @param                  $pattern
-     *
-     * @return int|null
-     * @throws Exception
-     */
-    static function match(Twig_Environment $env, $value, $pattern)
-    {
-        self::assertNoEval($pattern);
-        if (!isset($value)) {
-            return null;
-        }
-
-        return preg_match($pattern, $value);
-    }
-
-    /**
-     * @param $pattern
-     *
-     * @throws Exception
-     */
-    public static function assertNoEval($pattern)
-    {
-        if (preg_match('/(.).*\1(.+)$/', trim($pattern), $match) && strpos($match[1], 'e') !== false) {
-            throw new \Exception("Using the eval modifier for regular expressions is not allowed");
-        }
-    }
-}
-
-/**
- * Class Twig_Extensions_Extension_Pcre
- */
-class TwiggyExtensionPcre extends Twig_Extension
-{
-    /**
-     * Class constructor
-     */
-    public function __construct()
-    {
-        if (!extension_loaded('pcre')) {
-            throw new \Exception("The Twig PCRE extension requires PHP extension 'pcre' (see http://www.php.net/pcre).");
-        }
-    }
-
-    /**
      * @return string
      */
     public function getName()
     {
         return 'twiggy/pcre';
-    }
-
-    /**
-     * Callback for Twig
-     *
-     * @ignore
-     */
-    public function getFilters()
-    {
-        return array(
-            new Twig_SimpleFilter('preg_quote', 'TwiggyPcreFilters::quote', array(
-                'needs_environment' => true,
-            )),
-            new Twig_SimpleFilter('preg_match', 'TwiggyPcreFilters::match', array(
-                'needs_environment' => true,
-            )),
-            new Twig_SimpleFilter('preg_get', 'TwiggyPcreFilters::get', array(
-                'needs_environment' => true,
-            )),
-            new Twig_SimpleFilter('preg_get_all', 'TwiggyPcreFilters::getAll', array(
-                'needs_environment' => true,
-            )),
-            new Twig_SimpleFilter('preg_grep', 'TwiggyPcreFilters::grep', array(
-                'needs_environment' => true,
-            )),
-            new Twig_SimpleFilter('preg_replace', 'TwiggyPcreFilters::replace', array(
-                'needs_environment' => true,
-            )),
-            new Twig_SimpleFilter('preg_filter', 'TwiggyPcreFilters::filter', array(
-                'needs_environment' => true,
-            )),
-            new Twig_SimpleFilter('preg_split', 'TwiggyPcreFilters::split', array(
-                'needs_environment' => true,
-            )),
-        );
     }
 
 }
