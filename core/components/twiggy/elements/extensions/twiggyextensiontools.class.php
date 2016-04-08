@@ -631,6 +631,8 @@ class TwiggyExtensionTools extends Twig_Extension
             new Twig_SimpleFilter('field', 'TwiggyExtensionTools::filterGetField', array(
                 'needs_environment' => true
             )),
+
+            new Twig_SimpleFilter('md5', 'md5'),
         );
     }
 
@@ -696,7 +698,7 @@ class TwiggyExtensionTools extends Twig_Extension
             new Twig_SimpleFunction('hasPermission', 'TwiggyExtensionTools::hasPermission'),
 
             new Twig_SimpleFunction('getChildIds', 'TwiggyExtensionTools::getChildIds'),
-            new Twig_SimpleFunction('getParentIds', 'TwiggyExtensionTools::getParentIds')
+            new Twig_SimpleFunction('getParentIds', 'TwiggyExtensionTools::getParentIds'),
 
         );
     }
