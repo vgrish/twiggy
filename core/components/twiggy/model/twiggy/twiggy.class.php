@@ -708,7 +708,7 @@ class Twiggy
             $this->modx->registry->twiggy->subscribe('/cache/time');
             $this->modx->registry->twiggy->send('/cache/time',
                 array('time' => time()),
-                array('ttl' => $this->getOption('lock_ttl', null, 30)) //43200
+                array('ttl' => $this->getOption('lock_ttl', null, 43200))
             );
         }
 
