@@ -702,6 +702,16 @@ class Twiggy
      */
     public function clearTwiggyCache()
     {
+        if ($this->modx->getService('registry', 'registry.modRegistry')) {
+            $this->modx->registry->getRegister('twiggy', 'registry.modDbRegister', array('directory' => 'twiggy'));
+            $this->modx->registry->twiggy->connect();
+            $this->modx->registry->twiggy->subscribe('/cache/time');
+            $this->modx->registry->twiggy->send('/cache/time',
+                array('time' => time()),
+                array('ttl' => $this->getOption('lock_ttl', null, 30)) //43200
+            );
+        }
+
         $folder = rtrim(trim($this->getOption('cache', $this->config, MODX_CORE_PATH . 'cache/default/twiggy/', true)),
                 'cache/') . '/';
 

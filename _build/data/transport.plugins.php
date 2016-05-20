@@ -11,9 +11,11 @@ $tmp = array(
             'OnTemplateSave'           => array(),
             'OnTemplateRemove'         => array(),
             'OnBeforeSaveWebPageCache' => array(),
+            'OnLoadWebDocument'   => array(
+                'priority' => 150
+            ),
         )
     )
-
 );
 
 foreach ($tmp as $k => $v) {

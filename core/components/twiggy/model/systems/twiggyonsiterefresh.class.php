@@ -6,5 +6,4 @@ class twiggyOnSiteRefresh extends twiggyPlugin
     {
         $this->twiggy->clearTwiggyCache();
     }
-
 }

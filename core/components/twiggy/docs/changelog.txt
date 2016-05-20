@@ -1,5 +1,9 @@
 Changelog for Twiggy.
 
+1.2.11-beta (20.05.2016)
+==============
+- Add "clear cache"
+
 1.2.10-beta (25.04.2016)
 ==============
 - Fix "metadata"
