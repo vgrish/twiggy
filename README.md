@@ -150,7 +150,7 @@ First name: {{ fullname|preg_get('/^\S+/') }}
 ```
 switch ($modx->event->name) {
 
-    case 'twiggyOnInit':
+    case 'twiggyOnTwigInit':
 
 		if (!$twiggy = $modx->getOption('twiggy', $scriptProperties)) {
 			return;
