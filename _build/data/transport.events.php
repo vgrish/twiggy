@@ -3,7 +3,7 @@
 $events = array();
 
 $tmp = array(
-    'twiggyOnInit',
+    'twiggyOnTwigInit',
 );
 
 foreach ($tmp as $k => $v) {

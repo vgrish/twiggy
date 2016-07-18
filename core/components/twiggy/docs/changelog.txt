@@ -1,8 +1,8 @@
 Changelog for Twiggy.
 
-1.2.12-beta (18.07.2016)
+1.2.12-13-beta (18.07.2016)
 ==============
-- Add event "twiggyOnInit"
+- Add event "twiggyOnTwigInit"
 
 1.2.11-beta (20.05.2016)
 ==============

@@ -457,7 +457,7 @@ class Twiggy
                 $this->setGlobals();
 
                 $this->modx->invokeEvent(
-                    'twiggyOnInit',
+                    'twiggyOnTwigInit',
                     array(
                         'twiggy' => $this,
                         'config' => $this->config

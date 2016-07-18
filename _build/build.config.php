@@ -4,7 +4,7 @@
 define('PKG_NAME', 'Twiggy');
 define('PKG_NAME_LOWER', 'twiggy');
 
-define('PKG_VERSION', '1.2.12');
+define('PKG_VERSION', '1.2.13');
 define('PKG_RELEASE', 'beta');
 define('PKG_AUTO_INSTALL', true);
 define('PKG_NAMESPACE_PATH', '{core_path}components/twiggy/');
