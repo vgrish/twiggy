@@ -144,3 +144,29 @@ First name: {{ fullname|preg_get('/^\S+/') }}
   {% endfor %}
 </ul>
 ```
+
+## Add Service ##
+
+```
+switch ($modx->event->name) {
+
+    case 'twiggyOnInit':
+
+		if (!$twiggy = $modx->getOption('twiggy', $scriptProperties)) {
+			return;
+		}
+
+		$fqn = $modx->getOption('modclassvar_class', null, 'modclassvar.modclassvar', true);
+        $path = $modx->getOption('modclassvar_class_path', null,
+            $modx->getOption('core_path', null, MODX_CORE_PATH) . 'components/modclassvar/');
+        if (!$modclassvar = $modx->getService($fqn, '', $path . 'model/',
+            array('core_path' => $path))
+        ) {
+            return false;
+        }
+
+		$twiggy->twig->addGlobal('mcv', $modclassvar);
+
+        break;
+}
+```
