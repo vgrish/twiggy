@@ -15,7 +15,8 @@ $tmp = array(
                 'priority' => 150
             ),
         )
-    )
+    ),
+    
 );
 
 foreach ($tmp as $k => $v) {

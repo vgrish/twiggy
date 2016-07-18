@@ -456,6 +456,14 @@ class Twiggy
                 /** set Globals */
                 $this->setGlobals();
 
+                $this->modx->invokeEvent(
+                    'twiggyOnInit',
+                    array(
+                        'twiggy' => $this,
+                        'config' => $this->config
+                    )
+                );
+
             } catch (Exception $e) {
                 $this->modx->log(xPDO::LOG_LEVEL_ERROR, $e->getMessage());
 

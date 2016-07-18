@@ -1,5 +1,9 @@
 Changelog for Twiggy.
 
+1.2.12-beta (18.07.2016)
+==============
+- Add event "twiggyOnInit"
+
 1.2.11-beta (20.05.2016)
 ==============
 - Add "clear cache"
