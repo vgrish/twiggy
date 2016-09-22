@@ -1,5 +1,9 @@
 Changelog for Twiggy.
 
+1.2.14-beta (18.07.2016)
+==============
+- Add "typeOf" filter
+
 1.2.12-13-beta (18.07.2016)
 ==============
 - Add event "twiggyOnTwigInit"

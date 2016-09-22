@@ -90,6 +90,55 @@ class TwiggyExtensionTools extends Twig_Extension
     }
 
     /**
+     * @param Twig_Environment $env
+     * @param                  $var
+     * @param null             $type
+     * @param null             $class
+     *
+     * @return bool
+     */
+    public static function filterGetType(
+        Twig_Environment $env,
+        $var,
+        $type = null,
+        $class = null
+    ) {
+
+        switch ($type) {
+            case 'bool':
+                return filter_var($var, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== null;
+            case 'float':
+                return filter_var($var, FILTER_VALIDATE_FLOAT) !== false;
+            case 'int':
+                return filter_var($var, FILTER_VALIDATE_INT) !== false;
+            case 'email':
+                return filter_var($var, FILTER_VALIDATE_EMAIL) !== false;
+            case 'ip':
+                return filter_var($var, FILTER_VALIDATE_IP) !== false;
+            case 'regexp':
+                return filter_var($var, FILTER_VALIDATE_REGEXP) !== false;
+            case 'url':
+                return filter_var($var, FILTER_VALIDATE_URL) !== false;
+
+            case 'numeric':
+                return is_numeric($var);
+            case 'array':
+                return is_array($var);
+            case 'class':
+                return is_object($var) === true AND get_class($var) === $class;
+            case 'object':
+                return is_object($var);
+            case 'scalar':
+                return is_scalar($var);
+            case 'string':
+                return is_string($var);
+
+            default:
+                return false;
+        }
+    }
+
+    /**
      * @param     $log
      */
     public static function log($log)
@@ -632,7 +681,12 @@ class TwiggyExtensionTools extends Twig_Extension
                 'needs_environment' => true
             )),
 
+            new Twig_SimpleFilter('typeOf', 'TwiggyExtensionTools::filterGetType', array(
+                'needs_environment' => true
+            )),
+
             new Twig_SimpleFilter('md5', 'md5'),
+
         );
     }
 
