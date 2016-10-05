@@ -42,12 +42,10 @@ class Twig_TokenParser_From extends Twig_TokenParser
 
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
 
-        $node = new Twig_Node_Import($macro,
-            new Twig_Node_Expression_AssignName($this->parser->getVarName(), $token->getLine()), $token->getLine(),
-            $this->getTag());
+        $node = new Twig_Node_Import($macro, new Twig_Node_Expression_AssignName($this->parser->getVarName(), $token->getLine()), $token->getLine(), $this->getTag());
 
         foreach ($targets as $name => $alias) {
-            $this->parser->addImportedSymbol('function', $alias, 'macro_' . $name, $node->getNode('var'));
+            $this->parser->addImportedSymbol('function', $alias, 'macro_'.$name, $node->getNode('var'));
         }
 
         return $node;

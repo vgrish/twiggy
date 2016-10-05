@@ -38,7 +38,7 @@ class Twig_Loader_Array implements Twig_LoaderInterface, Twig_ExistsLoaderInterf
     /**
      * Adds or overrides a template.
      *
-     * @param string $name The template name
+     * @param string $name     The template name
      * @param string $template The template source
      */
     public function setTemplate($name, $template)

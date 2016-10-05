@@ -25,12 +25,11 @@ class Twig_TemplateIterator implements IteratorAggregate
             foreach ($loader->getNamespaces() as $namespace) {
                 $paths = $loader->getPaths($namespace);
                 foreach ($paths as $path) {
-                    foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator(realpath($path)),
-                        RecursiveIteratorIterator::LEAVES_ONLY) as $file) {
+                    foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator(realpath($path)), RecursiveIteratorIterator::LEAVES_ONLY) as $file) {
                         if (Twig_Loader_Filesystem::MAIN_NAMESPACE === $namespace) {
                             $templates[] = substr($file->getPathname(), strlen($path) + 1);
                         } else {
-                            $templates[] = '@' . $namespace . '/' . $file->getPathname();
+                            $templates[] = '@'.$namespace.'/'.$file->getPathname();
                         }
                     }
                 }

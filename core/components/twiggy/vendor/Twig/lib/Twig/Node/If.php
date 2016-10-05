@@ -19,7 +19,12 @@ class Twig_Node_If extends Twig_Node
 {
     public function __construct(Twig_Node $tests, Twig_Node $else = null, $lineno, $tag = null)
     {
-        parent::__construct(array('tests' => $tests, 'else' => $else), array(), $lineno, $tag);
+        $nodes = array('tests' => $tests);
+        if (null !== $else) {
+            $nodes['else'] = $else;
+        }
+
+        parent::__construct($nodes, array(), $lineno, $tag);
     }
 
     public function compile(Twig_Compiler $compiler)
@@ -29,25 +34,29 @@ class Twig_Node_If extends Twig_Node
             if ($i > 0) {
                 $compiler
                     ->outdent()
-                    ->write('} elseif (');
+                    ->write('} elseif (')
+                ;
             } else {
                 $compiler
-                    ->write('if (');
+                    ->write('if (')
+                ;
             }
 
             $compiler
                 ->subcompile($this->getNode('tests')->getNode($i))
                 ->raw(") {\n")
                 ->indent()
-                ->subcompile($this->getNode('tests')->getNode($i + 1));
+                ->subcompile($this->getNode('tests')->getNode($i + 1))
+            ;
         }
 
-        if ($this->hasNode('else') && null !== $this->getNode('else')) {
+        if ($this->hasNode('else')) {
             $compiler
                 ->outdent()
                 ->write("} else {\n")
                 ->indent()
-                ->subcompile($this->getNode('else'));
+                ->subcompile($this->getNode('else'))
+            ;
         }
 
         $compiler

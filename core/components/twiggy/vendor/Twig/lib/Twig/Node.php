@@ -22,19 +22,26 @@ class Twig_Node implements Countable, IteratorAggregate
     protected $lineno;
     protected $tag;
 
+    private $filename;
+
     /**
      * Constructor.
      *
      * The nodes are automatically made available as properties ($this->node).
      * The attributes are automatically made available as array items ($this['name']).
      *
-     * @param array  $nodes An array of named nodes
+     * @param array  $nodes      An array of named nodes
      * @param array  $attributes An array of attributes (should not be nodes)
-     * @param int    $lineno The line number
-     * @param string $tag The tag name associated with the Node
+     * @param int    $lineno     The line number
+     * @param string $tag        The tag name associated with the Node
      */
     public function __construct(array $nodes = array(), array $attributes = array(), $lineno = 0, $tag = null)
     {
+        foreach ($nodes as $name => $node) {
+            if (!$node instanceof self) {
+                throw new InvalidArgumentException(sprintf('Using "%s" for the value of node "%s" of "%s" is not supported. You must pass a Twig_Node instance.', is_object($node) ? get_class($node) : null === $node ? 'null' : gettype($node), $name, get_class($this)));
+            }
+        }
         $this->nodes = $nodes;
         $this->attributes = $attributes;
         $this->lineno = $lineno;
@@ -48,14 +55,14 @@ class Twig_Node implements Countable, IteratorAggregate
             $attributes[] = sprintf('%s: %s', $name, str_replace("\n", '', var_export($value, true)));
         }
 
-        $repr = array(get_class($this) . '(' . implode(', ', $attributes));
+        $repr = array(get_class($this).'('.implode(', ', $attributes));
 
         if (count($this->nodes)) {
             foreach ($this->nodes as $name => $node) {
                 $len = strlen($name) + 4;
                 $noderepr = array();
-                foreach (explode("\n", (string)$node) as $line) {
-                    $noderepr[] = str_repeat(' ', $len) . $line;
+                foreach (explode("\n", (string) $node) as $line) {
+                    $noderepr[] = str_repeat(' ', $len).$line;
                 }
 
                 $repr[] = sprintf('  %s: %s', $name, ltrim(implode("\n", $noderepr)));
@@ -144,7 +151,7 @@ class Twig_Node implements Countable, IteratorAggregate
      */
     public function hasNode($name)
     {
-        return array_key_exists($name, $this->nodes);
+        return isset($this->nodes[$name]);
     }
 
     /**
@@ -156,7 +163,7 @@ class Twig_Node implements Countable, IteratorAggregate
      */
     public function getNode($name)
     {
-        if (!array_key_exists($name, $this->nodes)) {
+        if (!isset($this->nodes[$name])) {
             throw new LogicException(sprintf('Node "%s" does not exist for Node "%s".', $name, get_class($this)));
         }
 
@@ -169,7 +176,7 @@ class Twig_Node implements Countable, IteratorAggregate
      * @param string    $name
      * @param Twig_Node $node
      */
-    public function setNode($name, $node = null)
+    public function setNode($name, Twig_Node $node)
     {
         $this->nodes[$name] = $node;
     }
@@ -192,5 +199,18 @@ class Twig_Node implements Countable, IteratorAggregate
     public function getIterator()
     {
         return new ArrayIterator($this->nodes);
+    }
+
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
+        foreach ($this->nodes as $node) {
+            $node->setFilename($filename);
+        }
+    }
+
+    public function getFilename()
+    {
+        return $this->filename;
     }
 }

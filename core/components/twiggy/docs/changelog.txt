@@ -1,5 +1,9 @@
 Changelog for Twiggy.
 
+1.2.15-beta (05.10.2016)
+==============
+- Update "Twig"
+
 1.2.14-beta (22.09.2016)
 ==============
 - Add "typeOf" filter

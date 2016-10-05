@@ -27,6 +27,7 @@ class Twig_Node_Expression_Test_Divisibleby extends Twig_Node_Expression_Test
             ->subcompile($this->getNode('node'))
             ->raw(' % ')
             ->subcompile($this->getNode('arguments')->getNode(0))
-            ->raw(')');
+            ->raw(')')
+        ;
     }
 }

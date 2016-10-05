@@ -58,9 +58,9 @@ EOF;
             $data[$edge]['pmu'] += $profile->getPeakMemoryUsage();
         } else {
             $data[$edge] = array(
-                'ct'  => 1,
-                'wt'  => floor($profile->getDuration() * 1000000),
-                'mu'  => $profile->getMemoryUsage(),
+                'ct' => 1,
+                'wt' => floor($profile->getDuration() * 1000000),
+                'mu' => $profile->getMemoryUsage(),
                 'pmu' => $profile->getPeakMemoryUsage(),
             );
         }

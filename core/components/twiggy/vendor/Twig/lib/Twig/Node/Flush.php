@@ -25,6 +25,7 @@ class Twig_Node_Flush extends Twig_Node
     {
         $compiler
             ->addDebugInfo($this)
-            ->write("flush();\n");
+            ->write("flush();\n")
+        ;
     }
 }

@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 class Twig_Extension_Escaper extends Twig_Extension
 {
     private $defaultStrategy;
@@ -75,11 +74,6 @@ class Twig_Extension_Escaper extends Twig_Extension
         }
 
         return $this->defaultStrategy;
-    }
-
-    public function getName()
-    {
-        return 'escaper';
     }
 }
 

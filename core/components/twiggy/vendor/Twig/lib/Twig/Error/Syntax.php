@@ -20,7 +20,7 @@ class Twig_Error_Syntax extends Twig_Error
     /**
      * Tweaks the error message to include suggestions.
      *
-     * @param string $name The original name of the item that does not exist
+     * @param string $name  The original name of the item that does not exist
      * @param array  $items An array of possible items
      */
     public function addSuggestions($name, array $items)

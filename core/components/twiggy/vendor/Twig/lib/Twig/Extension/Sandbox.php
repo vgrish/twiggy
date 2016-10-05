@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 class Twig_Extension_Sandbox extends Twig_Extension
 {
     private $sandboxedGlobally;
@@ -89,10 +88,5 @@ class Twig_Extension_Sandbox extends Twig_Extension
         }
 
         return $obj;
-    }
-
-    public function getName()
-    {
-        return 'sandbox';
     }
 }

@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 abstract class Twig_Extension implements Twig_ExtensionInterface
 {
     /**
@@ -55,14 +54,6 @@ abstract class Twig_Extension implements Twig_ExtensionInterface
      * {@inheritdoc}
      */
     public function getOperators()
-    {
-        return array();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getGlobals()
     {
         return array();
     }

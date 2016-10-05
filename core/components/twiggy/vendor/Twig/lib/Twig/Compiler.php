@@ -24,7 +24,6 @@ class Twig_Compiler
     private $debugInfo = array();
     private $sourceOffset;
     private $sourceLine;
-    private $filename;
 
     /**
      * Constructor.
@@ -34,11 +33,6 @@ class Twig_Compiler
     public function __construct(Twig_Environment $env)
     {
         $this->env = $env;
-    }
-
-    public function getFilename()
-    {
-        return $this->filename;
     }
 
     /**
@@ -64,7 +58,7 @@ class Twig_Compiler
     /**
      * Compiles a node.
      *
-     * @param Twig_Node $node The node to compile
+     * @param Twig_Node $node        The node to compile
      * @param int       $indentation The current indentation
      *
      * @return Twig_Compiler The current compiler instance
@@ -80,7 +74,7 @@ class Twig_Compiler
         $this->indentation = $indentation;
 
         if ($node instanceof Twig_Node_Module) {
-            $this->filename = $node->getAttribute('filename');
+            $node->setFilename($node->getAttribute('filename'));
         }
 
         $node->compile($this);
@@ -213,7 +207,7 @@ class Twig_Compiler
             // when mbstring.func_overload is set to 2
             // mb_substr_count() replaces substr_count()
             // but they have different signatures!
-            if (((int)ini_get('mbstring.func_overload')) & 2) {
+            if (((int) ini_get('mbstring.func_overload')) & 2) {
                 // this is much slower than the "right" version
                 $this->sourceLine += mb_substr_count(mb_substr($this->source, $this->sourceOffset), "\n");
             } else {
@@ -262,7 +256,7 @@ class Twig_Compiler
     {
         // can't outdent by more steps than the current indentation level
         if ($this->indentation < $step) {
-            throw new LogicException('Unable to call outdent() as the indentation would become negative');
+            throw new LogicException('Unable to call outdent() as the indentation would become negative.');
         }
 
         $this->indentation -= $step;

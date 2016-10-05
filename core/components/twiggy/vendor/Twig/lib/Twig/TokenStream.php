@@ -21,16 +21,20 @@ class Twig_TokenStream
     private $current = 0;
     private $filename;
 
+    private $source;
+
     /**
      * Constructor.
      *
-     * @param array  $tokens An array of tokens
-     * @param string $filename The name of the filename which tokens are associated with
+     * @param array  $tokens        An array of tokens
+     * @param string $filename|null The name of the filename which tokens are associated with
+     * @param string $source|null   The source code associated with the tokens
      */
-    public function __construct(array $tokens, $filename = null)
+    public function __construct(array $tokens, $filename = null, $source = null)
     {
         $this->tokens = $tokens;
         $this->filename = $filename;
+        $this->source = $source ? $source : '';
     }
 
     /**
@@ -45,8 +49,7 @@ class Twig_TokenStream
 
     public function injectTokens(array $tokens)
     {
-        $this->tokens = array_merge(array_slice($this->tokens, 0, $this->current), $tokens,
-            array_slice($this->tokens, $this->current));
+        $this->tokens = array_merge(array_slice($this->tokens, 0, $this->current), $tokens, array_slice($this->tokens, $this->current));
     }
 
     /**
@@ -57,8 +60,7 @@ class Twig_TokenStream
     public function next()
     {
         if (!isset($this->tokens[++$this->current])) {
-            throw new Twig_Error_Syntax('Unexpected end of template', $this->tokens[$this->current - 1]->getLine(),
-                $this->filename);
+            throw new Twig_Error_Syntax('Unexpected end of template.', $this->tokens[$this->current - 1]->getLine(), $this->filename);
         }
 
         return $this->tokens[$this->current - 1];
@@ -86,8 +88,8 @@ class Twig_TokenStream
         $token = $this->tokens[$this->current];
         if (!$token->test($type, $value)) {
             $line = $token->getLine();
-            throw new Twig_Error_Syntax(sprintf('%sUnexpected token "%s" of value "%s" ("%s" expected%s)',
-                $message ? $message . '. ' : '',
+            throw new Twig_Error_Syntax(sprintf('%sUnexpected token "%s" of value "%s" ("%s" expected%s).',
+                $message ? $message.'. ' : '',
                 Twig_Token::typeToEnglish($token->getType()), $token->getValue(),
                 Twig_Token::typeToEnglish($type), $value ? sprintf(' with value "%s"', $value) : ''),
                 $line,
@@ -109,8 +111,7 @@ class Twig_TokenStream
     public function look($number = 1)
     {
         if (!isset($this->tokens[$this->current + $number])) {
-            throw new Twig_Error_Syntax('Unexpected end of template',
-                $this->tokens[$this->current + $number - 1]->getLine(), $this->filename);
+            throw new Twig_Error_Syntax('Unexpected end of template.', $this->tokens[$this->current + $number - 1]->getLine(), $this->filename);
         }
 
         return $this->tokens[$this->current + $number];
@@ -147,12 +148,22 @@ class Twig_TokenStream
     }
 
     /**
-     * Gets the filename associated with this stream.
+     * Gets the filename associated with this stream (null if not defined).
      *
-     * @return string
+     * @return string|null
      */
     public function getFilename()
     {
         return $this->filename;
+    }
+
+    /**
+     * Gets the source code associated with this stream.
+     *
+     * @return string
+     */
+    public function getSource()
+    {
+        return $this->source;
     }
 }

@@ -23,7 +23,7 @@ interface Twig_CacheInterface
     /**
      * Generates a cache key for the given template class name.
      *
-     * @param string $name The template name
+     * @param string $name      The template name
      * @param string $className The template class name
      *
      * @return string
@@ -33,7 +33,7 @@ interface Twig_CacheInterface
     /**
      * Writes the compiled template to cache.
      *
-     * @param string $key The cache key
+     * @param string $key     The cache key
      * @param string $content The template representation as a PHP class
      */
     public function write($key, $content);

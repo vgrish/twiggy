@@ -25,19 +25,18 @@ class Twig_Test
     /**
      * Creates a template test.
      *
-     * @param string        $name Name of this test
-     * @param callable|null $callable A callable implementing the test. If null, you need to overwrite the "node_class"
-     *     option to customize compilation.
-     * @param array         $options Options array
+     * @param string        $name     Name of this test
+     * @param callable|null $callable A callable implementing the test. If null, you need to overwrite the "node_class" option to customize compilation.
+     * @param array         $options  Options array
      */
-    public function __construct($name, callable $callable = null, array $options = array())
+    public function __construct($name, $callable = null, array $options = array())
     {
         $this->name = $name;
         $this->callable = $callable;
         $this->options = array_merge(array(
             'is_variadic' => false,
-            'node_class'  => 'Twig_Node_Expression_Test',
-            'deprecated'  => false,
+            'node_class' => 'Twig_Node_Expression_Test',
+            'deprecated' => false,
             'alternative' => null,
         ), $options);
     }
@@ -68,6 +67,11 @@ class Twig_Test
     }
 
     public function isDeprecated()
+    {
+        return (bool) $this->options['deprecated'];
+    }
+
+    public function getDeprecatedVersion()
     {
         return $this->options['deprecated'];
     }

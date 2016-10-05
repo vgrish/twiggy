@@ -22,7 +22,6 @@ final class Twig_Extension_Staging extends Twig_Extension
     private $filters = array();
     private $visitors = array();
     private $tokenParsers = array();
-    private $globals = array();
     private $tests = array();
 
     public function addFunction(Twig_Function $function)
@@ -65,16 +64,6 @@ final class Twig_Extension_Staging extends Twig_Extension
         return $this->tokenParsers;
     }
 
-    public function addGlobal($name, $value)
-    {
-        $this->globals[$name] = $value;
-    }
-
-    public function getGlobals()
-    {
-        return $this->globals;
-    }
-
     public function addTest(Twig_Test $test)
     {
         $this->tests[$test->getName()] = $test;
@@ -83,10 +72,5 @@ final class Twig_Extension_Staging extends Twig_Extension
     public function getTests()
     {
         return $this->tests;
-    }
-
-    public function getName()
-    {
-        return 'staging';
     }
 }
